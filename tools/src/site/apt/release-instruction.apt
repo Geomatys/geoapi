@@ -9,7 +9,7 @@ Steps for creating a GeoAPI milestone in a Unix environment
 
 ---------------------------------------------------------------------------------------------
 export GEOAPI_SNAPSHOT=4.0-SNAPSHOT
-export GEOAPI_VERSION=4.0-M06
+export GEOAPI_VERSION=4.0-M07
 ---------------------------------------------------------------------------------------------
 
 
