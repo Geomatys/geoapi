@@ -22,8 +22,8 @@ sys.path.insert(0, os.path.abspath('../../../geoapi/src/main/python'))
 project    = "GeoAPI"
 copyright  = "1994–2018 Open Geospatial Consortium. All rights reserved"
 author     = "Open Geospatial Consortium"
-version    = "4.0-SNAPSHOT"
-release    = "4.0-SNAPSHOT"
+version    = "4.0-M11"
+release    = "4.0-M11"
 html_title = "Documentation"
 html_logo  = "../resources/images/logo.png"
 
