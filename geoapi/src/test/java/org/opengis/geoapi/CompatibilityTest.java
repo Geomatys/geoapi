@@ -96,7 +96,7 @@ public final class CompatibilityTest implements Closeable {
      */
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public static void listChanges() throws IOException, ClassNotFoundException, NoSuchMethodException {
-        try (final CompatibilityTest c = new CompatibilityTest("3.1-SNAPSHOT", "4.0-SNAPSHOT")) {
+        try (final CompatibilityTest c = new CompatibilityTest("3.1-SNAPSHOT", "4.0-M14")) {
             for (final IncompatibleChange change : c.acceptedIncompatibleChanges) {
                 System.out.println(change.method + "=I");
             }
