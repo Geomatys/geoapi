@@ -62,7 +62,7 @@ public interface Scope extends org.opengis.metadata.maintenance.Scope {
     /**
      * Hierarchical level of the data specified by the scope.
      *
-     * @return hierarchical level of the data.
+     * @return returns the hierarchical level of the data.
      */
     @Override
     @UML(identifier="level", obligation=MANDATORY, specification=ISO_19115)
@@ -71,7 +71,7 @@ public interface Scope extends org.opengis.metadata.maintenance.Scope {
     /**
      * Information about the spatial, vertical and temporal extent of the data specified by the scope.
      *
-     * @return information about the extent of the data, or {@code null}.
+     * @return returns the information about the extent of the data.
      *
      * @deprecated As of ISO 19115:2014, replaced by {@link #getExtents()}.
      */
@@ -87,7 +87,7 @@ public interface Scope extends org.opengis.metadata.maintenance.Scope {
      * Shall be defined only if the {@linkplain #getLevel() level} is not equal
      * to {@link ScopeCode#DATASET} or {@link ScopeCode#SERIES}.
      *
-     * @return detailed description about the level of the data.
+     * @return returns the detailed description about the level of the data.
      */
     @Override
     @UML(identifier="levelDescription", obligation=CONDITIONAL, specification=ISO_19115)

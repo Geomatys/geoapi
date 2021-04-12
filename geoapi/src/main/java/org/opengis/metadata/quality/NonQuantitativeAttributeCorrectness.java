@@ -37,13 +37,14 @@ import static org.opengis.annotation.Specification.*;
 
 
 /**
- * Closeness of reported coordinate values to values accepted as or being true.
+ * Correctness of non-quantitative attributes.
  *
  * @author  Martin Desruisseaux (IRD)
+ * @author  Cory Horner (Refractions Research)
  * @author  Alexis Gaillard (Geomatys)
  * @version 3.1
- * @since   2.0
+ * @since   2.1
  */
-@UML(identifier="DQ_AbsoluteExternalPositionalAccuracy", specification=ISO_19157)
-public interface AbsoluteExternalPositionalAccuracy extends PositionalAccuracy {
+@UML(identifier="DQ_NonQuantitativeAttributeCorrectness", specification=ISO_19157)
+public interface NonQuantitativeAttributeCorrectness extends ThematicAccuracy {
 }

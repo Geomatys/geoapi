@@ -68,8 +68,8 @@ public interface CoverageResult extends Result {
     SpatialRepresentation getResultSpatialRepresentation();
 
     /**
-     * Provides the description of the content of the result coverage, i.e. semantic definition
-     * of the data quality measures.
+     * Provides the description of the content of the result coverage,
+     * i.e. semantic definition of the data quality measures.
      *
      * @return description of the content of the result coverage.
      */

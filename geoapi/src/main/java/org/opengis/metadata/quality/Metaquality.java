@@ -2,7 +2,7 @@
  *    GeoAPI - Java interfaces for OGC/ISO standards
  *    http://www.geoapi.org
  *
- *    Copyright (C) 2004-2021 Open Geospatial Consortium, Inc.
+ *    Copyright (C) 2021 Open Geospatial Consortium, Inc.
  *    All Rights Reserved. http://www.opengeospatial.org/ogc/legal
  *
  *    Permission to use, copy, and modify this software and its documentation, with
@@ -31,19 +31,35 @@
  */
 package org.opengis.metadata.quality;
 
+import java.util.Collection;
+import java.util.Collections;
+import org.opengis.annotation.Classifier;
 import org.opengis.annotation.UML;
+import org.opengis.annotation.Stereotype;
 
 import static org.opengis.annotation.Specification.*;
+import static org.opengis.annotation.Obligation.*;
 
 
 /**
- * Closeness of reported coordinate values to values accepted as or being true.
+ * Information about the reliability of data quality results
  *
- * @author  Martin Desruisseaux (IRD)
  * @author  Alexis Gaillard (Geomatys)
+ * @author  Martin Desruisseaux (Geomatys)
  * @version 3.1
- * @since   2.0
+ * @since   3.1
  */
-@UML(identifier="DQ_AbsoluteExternalPositionalAccuracy", specification=ISO_19157)
-public interface AbsoluteExternalPositionalAccuracy extends PositionalAccuracy {
+@Classifier(Stereotype.ABSTRACT)
+@UML(identifier="DQ_Metaquality", specification=ISO_19157)
+public interface Metaquality extends Element{
+    /**
+     * Derived element.
+     *
+     * @return the specific element that is derived.
+     */
+    @Override
+    @UML(identifier="derivedElement", obligation=OPTIONAL, specification=ISO_19157)
+    default Collection<? extends Element> getDerivedElement() {
+        return Collections.emptyList();
+    }
 }

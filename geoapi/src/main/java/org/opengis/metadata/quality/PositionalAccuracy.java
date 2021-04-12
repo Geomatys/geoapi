@@ -42,10 +42,11 @@ import static org.opengis.annotation.Specification.*;
  * Accuracy of the position of features.
  *
  * @author  Martin Desruisseaux (IRD)
+ * @author  Alexis Gaillard (Geomatys)
  * @version 3.1
  * @since   2.0
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_PositionalAccuracy", specification=ISO_19115, version=2003)
+@UML(identifier="DQ_PositionalAccuracy", specification=ISO_19157)
 public interface PositionalAccuracy extends Element {
 }
