@@ -38,13 +38,17 @@ import static org.opengis.annotation.Specification.*;
 
 /**
  * Accuracy of non-quantitative attributes.
+ * (It's NonQuantitativeAttributeCorrectness now)
  *
  * @author  Martin Desruisseaux (IRD)
  * @author  Cory Horner (Refractions Research)
  * @author  Alexis Gaillard (Geomatys)
  * @version 3.1
  * @since   2.1
+ *
+ * @deprecated Rennamed {@link NonQuatitativeAttributeCorrectness}.
  */
-@UML(identifier="DQ_NonQuantitativeAttributeAccuracy", specification=ISO_19157)
-public interface NonQuantitativeAttributeAccuracy extends ThematicAccuracy {
+@Deprecated
+@UML(identifier="DQ_NonQuantitativeAttributeAccuracy", specification=ISO_19115, version=2003)
+public interface NonQuantitativeAttributeAccuracy extends NonQuantitativeAttributeCorrectness {
 }

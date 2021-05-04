@@ -65,7 +65,7 @@ public interface Result {
     }
 
     /**
-     * date when the result was generated.
+     * Date when the result was generated.
      *
      * @return returns the date of the result.
      *

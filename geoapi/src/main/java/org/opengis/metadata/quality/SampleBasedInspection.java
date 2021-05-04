@@ -62,7 +62,7 @@ public interface SampleBasedInspection extends DataEvaluation {
      * @return returns the information on lots.
      */
     @UML(identifier="lotDescription", obligation=MANDATORY, specification=ISO_19157)
-    InternationalString getLotDescritpion();
+    InternationalString getLotDescription();
 
     /**
      * Information on how many samples on average are extracted for inspection from each lot of population.

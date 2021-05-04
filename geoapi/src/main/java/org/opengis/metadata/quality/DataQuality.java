@@ -91,7 +91,7 @@ public interface DataQuality {
      * @since 3.1
      */
     @UML(identifier="standaloneQualityReport", obligation=OPTIONAL, specification=ISO_19157)
-    default StandaloneQualityReportInformation getStandaloneQUalityReport() {
+    default StandaloneQualityReportInformation getStandaloneQualityReport() {
         return null;
     }
 }

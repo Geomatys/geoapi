@@ -63,7 +63,7 @@ public interface BasicMeasure {
      * @return definition of the data quality basic measure.
      */
     @UML(identifier="definition", obligation=MANDATORY, specification=ISO_19157)
-    InternationalString getDefiniton();
+    InternationalString getDefinition();
 
     /**
      * Illustration of the use of a data quality measure.

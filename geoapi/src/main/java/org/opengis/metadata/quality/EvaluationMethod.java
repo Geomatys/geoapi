@@ -83,7 +83,7 @@ public interface EvaluationMethod {
     }
 
     /**
-     * Information on documents which are referenced in developing and applying a data quality evaluation method
+     * Information on documents which are referenced in developing and applying a data quality evaluation method.
      *
      * @return recover information on documents who are referenced.
      */
@@ -105,7 +105,7 @@ public interface EvaluationMethod {
      * @return date or range of dates on which a data quality measure was applied.
      */
     @UML(identifier="dateTime", obligation=OPTIONAL, specification=ISO_19157)
-    default Collection<? extends Date> getDates() {
+    public default Collection<? extends Date> getDates() {
         return Collections.emptyList();
     }
 }
