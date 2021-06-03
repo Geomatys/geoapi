@@ -68,7 +68,11 @@ public interface Element {
     @UML(identifier="nameOfMeasure", obligation=OPTIONAL, specification=ISO_19115, version=2003)
     default Collection<? extends InternationalString> getNamesOfMeasure() {
         MeasureReference ref = getMeasure();
-        return (ref != Collections.emptyList()) ? ref.getNamesOfMeasure() : Collections.emptyList();
+        if (ref == null) {
+           return Collections.emptyList();
+        } else {
+            return ref.getNamesOfMeasure();
+        }
     }
 
     /**

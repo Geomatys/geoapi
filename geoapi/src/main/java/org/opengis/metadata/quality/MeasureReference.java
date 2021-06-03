@@ -42,7 +42,7 @@ import static org.opengis.annotation.Specification.*;
 
 
 /**
- * Reference to the measure used
+ * Reference to the measure used.
  *
  * @author  Alexis Gaillard (Geomatys)
  * @author  Martin Desruisseaux (Geomatys)

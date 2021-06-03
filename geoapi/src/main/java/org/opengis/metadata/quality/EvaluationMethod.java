@@ -43,7 +43,7 @@ import static org.opengis.annotation.Specification.*;
 
 
 /**
- * Description of the evaluation method and procedure applied
+ * Description of the evaluation method and procedure applied.
  *
  * @author  Alexis Gaillard (Geomatys)
  * @author  Martin Desruisseaux (Geomatys)
