@@ -14,7 +14,7 @@ The commands in the rest of this page assume that environment variables have bee
 Adjust the paths as necessary for the local installation.
 
 ```shell
-export GEOAPI_VERSION=4.0-SNAPSHOT
+export GEOAPI_VERSION=4.0-M20
 export CLASSPATH=~/.m2/repository/javax/measure/unit-api/1.0/unit-api-1.0.jar
 export CLASSPATH=$CLASSPATH:$PWD/geoapi/target/geoapi-$GEOAPI_VERSION.jar
 export CLASSPATH=$CLASSPATH:$PWD/tools/target/tools-$GEOAPI_VERSION.jar
