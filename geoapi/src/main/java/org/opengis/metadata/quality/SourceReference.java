@@ -32,7 +32,7 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   3.1
  */
-@UML(identifier="DQM_SourceReference", specification=ISO_19157)
+@UML(identifier="SourceReference", specification=ISO_19157)
 public interface SourceReference {
     /**
      * References to the source.

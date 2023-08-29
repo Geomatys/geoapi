@@ -41,6 +41,6 @@ import static org.opengis.annotation.Specification.*;
  * @since   2.0
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_LogicalConsistency", specification=ISO_19157)
-public interface LogicalConsistency extends Element {
+@UML(identifier="LogicalConsistency", specification=ISO_19157)
+public interface LogicalConsistency extends QualityElement {
 }

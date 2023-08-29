@@ -34,7 +34,7 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_DataQuality", specification=ISO_19157)
+@UML(identifier="DataQuality", specification=ISO_19157)
 public interface DataQuality {
     /**
      * The specific data to which the data quality information applies.
@@ -65,12 +65,13 @@ public interface DataQuality {
      * a single data quality measure might be insufficient for fully evaluating
      * the quality of the data specified by the {@linkplain #getScope() scope}.
      * Therefore multiple data quality measures may be reported.
-     * The data quality report should then include one instance of {@link Element} for each measure applied.
+     * The data quality report should then include one instance of {@link QualityElement} for each measure applied.
+     * todo new text suggestion : The data quality references the report(s) ({@link Metaquality} or {@link QualityEvaluationReportInformation}) associated to quality element(s).
      *
      * @return quality information for the data specified by the scope.
      */
     @UML(identifier="report", obligation=MANDATORY, specification=ISO_19157)
-    Collection<? extends Element> getReports();
+    Collection<? extends QualityElement> getReports();
 
     /**
      * Non-quantitative quality information about the lineage of the data specified by the scope.
@@ -87,17 +88,16 @@ public interface DataQuality {
     }
 
     /**
-     * Reference to an external standalone quality report.
+     * References the report(s) associated to quality element(s).
+     * new text suggestion : References the report(s) ({@link Metaquality} or {@link QualityEvaluationReportInformation}) associated to quality element(s).
      * Can be used for providing more details than reported as standard metadata.
      *
-     * @return reference to an external standalone quality report, or {@code null} if none.
+     * @return reference to an external quality evaluation report, or {@code null} if none.
      *
      * @since 3.1
-     *
-     * @todo Renamed in 19157:2022: {@code QualityEvaluationReport}.
      */
-    @UML(identifier="standaloneQualityReport", obligation=OPTIONAL, specification=ISO_19157)
-    default StandaloneQualityReportInformation getStandaloneQualityReport() {
+    @UML(identifier="qualityEvaluationReport", obligation=OPTIONAL, specification=ISO_19157)
+    default QualityEvaluationReportInformation getQualityEvaluationReport() {
         return null;
     }
 }

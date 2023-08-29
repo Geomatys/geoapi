@@ -31,7 +31,7 @@ import static org.opengis.annotation.Specification.*;
 /**
  * The values or information about the value(s) (or set of values) obtained from applying a data quality measure.
  * Quantitative result may be a single value or multiple values, depending on the {@linkplain #getValueType() value type}
- * and {@linkplain Measure#getValueStructure() value structure} defined in the description of the measure applied.
+ * and {@linkplain QualityMeasure#getValueStructure() value structure} defined in the description of the measure applied.
  *
  * @author  Martin Desruisseaux (IRD)
  * @author  Cory Horner (Refractions Research)
@@ -39,8 +39,8 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_QuantitativeResult", specification=ISO_19157)
-public interface QuantitativeResult extends Result {
+@UML(identifier="QuantitativeResult", specification=ISO_19157)
+public interface QuantitativeResult extends QualityResult {
     /**
      * Quantitative value or values, content determined by the evaluation procedure used.
      * This is determined accordingly with the value type and value structure defined for the measure.
@@ -56,23 +56,23 @@ public interface QuantitativeResult extends Result {
     /**
      * Value unit for reporting a data quality result.
      *
-     * @return value unit for reporting a data quality result, or {@code null}.
+     * @condition Mandatory if {@linkplain #getValues() value} is described by a number.
+     *
+     * @return value unit for reporting a data quality result.
      */
-    @UML(identifier="valueUnit", obligation=OPTIONAL, specification=ISO_19157)
-    default Unit<?> getValueUnit() {
-        return null;
-    }
+    @UML(identifier="valueUnit", obligation=CONDITIONAL, specification=ISO_19157)
+    default Unit<?> getValueUnit() { return null; }
 
     /**
      * Value type for reporting a data quality result.
-     * It describes how the {@linkplain Measure#getValueType() value type} and
-     * {@linkplain Measure#getValueStructure() value structure} defined in the
+     * It describes how the {@linkplain QualityMeasure#getValueType() value type} and
+     * {@linkplain QualityMeasure#getValueStructure() value structure} defined in the
      * measure are implemented to provide the value of the quantitative result.
      *
      * <div class="note"><b>Example:</b>
      * Within the description of the <cite>misclassification matrix</cite> measure,
-     * the {@linkplain Measure#getValueType() value type} may be an integer and
-     * the {@linkplain Measure#getValueStructure() value structure} is matrix (<var>n</var> × <var>n</var>).
+     * the {@linkplain QualityMeasure#getValueType() value type} may be an integer and
+     * the {@linkplain QualityMeasure#getValueStructure() value structure} is matrix (<var>n</var> × <var>n</var>).
      * The {@link #getValues() value} attribute of the {@code QuantitativeResult} provides the result matrix itself.
      * This attribute {@code valueRecordType} provides the description of the matrix type.
      * If another encoding is used, the attribute {@code valueRecordType} will change to provide the description
@@ -82,7 +82,7 @@ public interface QuantitativeResult extends Result {
      * @return value type for reporting a data quality result, or {@code null} if none.
      *
      * @see #getValues()
-     * @see Measure#getValueType()
+     * @see QualityMeasure#getValueType()
      *
      * @departure historic
      *   Renamed from {@code "valueRecordType"} to {@code "valueType"} for compatibility with ISO 19115:2003

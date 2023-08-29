@@ -88,6 +88,6 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_DomainConsistency", specification=ISO_19157)
+@UML(identifier="DomainConsistency", specification=ISO_19157)
 public interface DomainConsistency extends LogicalConsistency {
 }

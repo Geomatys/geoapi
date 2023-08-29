@@ -40,6 +40,6 @@ import static org.opengis.annotation.Specification.*;
  * @since   3.1
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_TemporalQuality", specification=ISO_19157)
-public interface TemporalQuality extends Element {
+@UML(identifier="TemporalQuality", specification=ISO_19157)
+public interface TemporalQuality extends QualityElement {
 }

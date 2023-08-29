@@ -36,8 +36,8 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_ConformanceResult", specification=ISO_19157)
-public interface ConformanceResult extends Result {
+@UML(identifier="ConformanceResult", specification=ISO_19157)
+public interface ConformanceResult extends QualityResult {
     /**
      * Citation of data product specification or user requirement against which data are being evaluated.
      *

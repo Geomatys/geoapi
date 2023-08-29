@@ -97,7 +97,7 @@ public class SimpleIdentifiedObject implements IdentifiedObject, Identifier {
     }
 
     /**
-     * Description of domain of usage, or limitations of usage, for which this object is valid.
+     * MeasureDescription of domain of usage, or limitations of usage, for which this object is valid.
      * Note that this method is not inherited from {@link IdentifiedObject}, but is
      * defined in sub-interfaces like {@link org.opengis.referencing.crs.SingleCRS}.
      *

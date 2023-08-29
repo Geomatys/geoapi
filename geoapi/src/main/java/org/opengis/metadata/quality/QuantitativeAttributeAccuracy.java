@@ -91,6 +91,6 @@ import static org.opengis.annotation.Specification.*;
  *
  * @since 2.0
  */
-@UML(identifier="DQ_QuantitativeAttributeAccuracy", specification=ISO_19157)
+@UML(identifier="QuantitativeAttributeAccuracy", specification=ISO_19157)
 public interface QuantitativeAttributeAccuracy extends ThematicAccuracy {
 }

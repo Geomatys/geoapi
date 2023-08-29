@@ -37,6 +37,6 @@ import static org.opengis.annotation.Specification.*;
  * @since   3.1
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_DataEvaluation", specification=ISO_19157)
+@UML(identifier="DataEvaluation", specification=ISO_19157)
 public interface DataEvaluation extends EvaluationMethod {
 }

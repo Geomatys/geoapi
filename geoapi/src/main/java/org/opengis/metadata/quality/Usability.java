@@ -33,5 +33,5 @@ import static org.opengis.annotation.Specification.*;
  */
 @Deprecated
 @UML(identifier="QE_Usability", specification=ISO_19115_2, version=2009)
-public interface Usability extends Element {
+public interface Usability extends QualityElement {
 }

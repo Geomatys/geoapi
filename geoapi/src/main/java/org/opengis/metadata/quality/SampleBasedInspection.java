@@ -36,7 +36,7 @@ import static org.opengis.annotation.Specification.*;
  *
  * @since 3.1
  */
-@UML(identifier="DQ_SampleBasedInspection", specification=ISO_19157)
+@UML(identifier="SampleBasedInspection", specification=ISO_19157)
 public interface SampleBasedInspection extends DataEvaluation {
     /**
      * Information of the type of sampling scheme and description of the sampling procedure.

@@ -369,7 +369,7 @@ public strictfp abstract class ReferencingTestCase extends TestCase {
                     if ((t = bbox.getEastBoundLongitude()) > xmax) xmax = t;
                 }
                 /*
-                 * Description: optional, but if present we allow any amount of identifiers
+                 * MeasureDescription: optional, but if present we allow any amount of identifiers
                  * provided that at least one contain the expected string.
                  */
                 if (description != null && e instanceof GeographicDescription) {

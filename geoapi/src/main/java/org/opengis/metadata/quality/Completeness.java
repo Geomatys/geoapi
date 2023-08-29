@@ -28,8 +28,8 @@ import static org.opengis.annotation.Specification.*;
  * Presence and absence of features, their attributes and their relationships.
  * Instances should be one of the following subtypes:
  * <ul>
- *   <li>{@link CompletenessOmission}: excess data present in a data set;</li>
- *   <li>{@link CompletenessCommission}: data absent from a data set.</li>
+ *   <li>{@link Commission}: excess data present in a data set;</li>
+ *   <li>{@link Omission}: data absent from a data set.</li>
  * </ul>
  *
  * @author  Martin Desruisseaux (IRD)
@@ -38,6 +38,6 @@ import static org.opengis.annotation.Specification.*;
  * @since   2.0
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_Completeness", specification=ISO_19157)
-public interface Completeness extends Element {
+@UML(identifier="Completeness", specification=ISO_19157)
+public interface Completeness extends QualityElement {
 }

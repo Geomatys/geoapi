@@ -28,7 +28,7 @@ import static org.opengis.annotation.Specification.*;
  *
  * <h2>Standardized values</h2>
  * In order to achieve well defined and comparable quality information, it is recommended to
- * report data quality using {@linkplain Measure quality measures} listed in ISO 19157 annex.
+ * report data quality using {@linkplain QualityMeasure quality measures} listed in ISO 19157 annex.
  * The following table provides a summary; see ISO 19157 for more complete descriptions and examples.
  * All identifiers should be in "ISO 19157" namespace.
  *
@@ -37,8 +37,8 @@ import static org.opengis.annotation.Specification.*;
  *   <tr>
  *     <th>{@linkplain MeasureReference#getMeasureIdentification() Identifier}</th>
  *     <th>{@linkplain MeasureReference#getNamesOfMeasure() Name of measure}</th>
- *     <th>{@linkplain Measure#getBasicMeasure() Basic measure}</th>
- *     <th>{@linkplain Measure#getValueType() Value type}</th>
+ *     <th>{@linkplain QualityMeasure#getBasicMeasure() Basic measure}</th>
+ *     <th>{@linkplain QualityMeasure#getValueType() Value type}</th>
  *     <th>Remarks</th>
  *   </tr><tr>
  *     <td>5</td>
@@ -61,7 +61,7 @@ import static org.opengis.annotation.Specification.*;
  *   </tr>
  * </table>
  *
- * <p>{@linkplain Measure#getDefinition() Definitions}:</p>
+ * <p>{@linkplain QualityMeasure#getDefinition() Definitions}:</p>
  * <ol start="5">
  *   <li>Indicator that shows a specific item is missing in the data.</li>
  *   <li>Count of all items that should have been in the data set or sample and are missing.</li>
@@ -72,12 +72,11 @@ import static org.opengis.annotation.Specification.*;
  * @author  Alexis Gaillard (Geomatys)
  * @version 3.1
  *
- * @see CompletenessCommission
+ * @see Commission
  *
  * @since 2.0
  *
- * @todo Renamed in 19157:2022: {@code Omission}.
  */
-@UML(identifier="DQ_CompletenessOmission", specification=ISO_19157)
-public interface CompletenessOmission extends Completeness {
+@UML(identifier="Omission", specification=ISO_19157)
+public interface Omission extends Completeness {
 }

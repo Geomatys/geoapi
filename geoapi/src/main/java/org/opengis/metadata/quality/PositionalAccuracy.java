@@ -28,8 +28,8 @@ import static org.opengis.annotation.Specification.*;
  * Accuracy of the position of features.
  * Instances should be one of the following subtypes:
  * <ul>
- *   <li>{@link AbsoluteExternalPositionalAccuracy}: closeness of reported coordinate values to values accepted as being true;</li>
- *   <li>{@link RelativeInternalPositionalAccuracy}: closeness of the relative positions of features in a data set
+ *   <li>{@link AbsolutePositionalAccuracy}: closeness of reported coordinate values to values accepted as being true;</li>
+ *   <li>{@link RelativePositionalAccuracy}: closeness of the relative positions of features in a data set
  *       to their respective relative positions accepted as being true;</li>
  *   <li>{@link GriddedDataPositionalAccuracy}: closeness of gridded data spatial position values to values accepted as being true.</li>
  * </ul>
@@ -40,6 +40,6 @@ import static org.opengis.annotation.Specification.*;
  * @since   2.0
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_PositionalAccuracy", specification=ISO_19157)
-public interface PositionalAccuracy extends Element {
+@UML(identifier="PositionalAccuracy", specification=ISO_19157)
+public interface PositionalAccuracy extends QualityElement {
 }

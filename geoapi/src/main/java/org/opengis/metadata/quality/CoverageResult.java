@@ -39,8 +39,8 @@ import static org.opengis.annotation.Specification.*;
  * @version 4.0
  * @since   2.3
  */
-@UML(identifier="DQ_CoverageResult", specification=ISO_19157)
-public interface CoverageResult extends Result {
+@UML(identifier="CoverageResult", specification=ISO_19157)
+public interface CoverageResult extends QualityResult {
     /**
      * Method used to spatially represent the coverage result.
      *
@@ -77,8 +77,7 @@ public interface CoverageResult extends Result {
      *
      * @return description of the content of the result coverage.
      *
-     * @condition Mandatory if {@linkplain #getResultFormat() result format}
-     *            and {@link #getResultFile() result file} are not provided.
+     * @condition Mandatory if {@linkplain #getResultFormat() result format} is not provided.
      */
     @UML(identifier="resultContent", obligation=CONDITIONAL, specification=ISO_19157)
     default Collection<? extends RangeDimension> getResultContent() {
@@ -103,8 +102,11 @@ public interface CoverageResult extends Result {
      * @return data file containing the result coverage data.
      *
      * @condition Mandatory if {@linkplain #getResultContent() result content} is not provided.
+     *
+     * @deprecated Removed as of ISO 19157:2023.
      */
-    @UML(identifier="resultFile", obligation=CONDITIONAL, specification=ISO_19157)
+    @Deprecated
+    @UML(identifier="resultFile", obligation=CONDITIONAL, specification=ISO_19157, version = 2018)
     default DataFile getResultFile() {
         return null;
     }

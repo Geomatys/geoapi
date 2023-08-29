@@ -554,7 +554,7 @@ public strictfp class CRSParserTest extends ReferencingTestCase {
      *     AXIS[“(Y)”,north,ORDER[1]],
      *     AXIS[“(X)”,east,ORDER[2]],
      *     LENGTHUNIT[“metre”,1.0],
-     *   SCOPE[“Description of a purpose”],
+     *   SCOPE[“MeasureDescription of a purpose”],
      *   AREA[“An area description”],
      *   ID[“EuroGeographics”,“ETRS-LAEA”]]
      * }
@@ -580,7 +580,7 @@ public strictfp class CRSParserTest extends ReferencingTestCase {
                 "    AXIS[“(Y)”,north,ORDER[1]],\n" +
                 "    AXIS[“(X)”,east,ORDER[2]],\n" +
                 "    LENGTHUNIT[“metre”,1.0],\n" +
-                "  SCOPE[“Description of a purpose”],\n" +
+                "  SCOPE[“MeasureDescription of a purpose”],\n" +
                 "  AREA[“An area description”],\n" +
                 "  ID[“EuroGeographics”,“ETRS-LAEA”]]");
 
@@ -611,7 +611,7 @@ public strictfp class CRSParserTest extends ReferencingTestCase {
 
         for (final ObjectDomain domain : crs.getDomains()) {
             verifyGeographicExtent(domain.getDomainOfValidity(), "An area description", NaN, NaN, NaN, NaN);
-            assertNullOrEquals("scope", "Description of a purpose", domain.getScope());
+            assertNullOrEquals("scope", "MeasureDescription of a purpose", domain.getScope());
         }
     }
 

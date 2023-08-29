@@ -46,9 +46,9 @@ public enum DocumentationStyle {
 
     /**
      * Prefix to omit at the beginning of sentence. Some XSD files begin their documentation with
-     * {@code "Description:"}, which is not necessary.
+     * {@code "MeasureDescription:"}, which is not necessary.
      */
-    private static final String OMIT = "Description:";
+    private static final String OMIT = "MeasureDescription:";
 
     /**
      * Parts to ignore from the description given in XSD files.
@@ -124,7 +124,7 @@ public enum DocumentationStyle {
      */
     static String sentence(final String doc, final StringBuilder buffer) {
         /*
-         * Skip leading whitespaces and "Description:" prefix (f any),
+         * Skip leading whitespaces and "MeasureDescription:" prefix (f any),
          * then omit "annexes" on new lines after the main description.
          * If the result is an empty string, use null for "no documentation".
          */

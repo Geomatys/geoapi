@@ -54,7 +54,7 @@ import org.opengis.referencing.operation.MathTransformFactory;
  *   <caption>Report properties</caption>
  *   <tr><th>Key</th>                    <th>Remarks</th>   <th>Meaning</th></tr>
  *   <tr><td>{@code TITLE}</td>          <td></td>          <td>Title of the web page to produce.</td></tr>
- *   <tr><td>{@code DESCRIPTION}</td>    <td>optional</td>  <td>Description to write after the introductory paragraph.</td></tr>
+ *   <tr><td>{@code DESCRIPTION}</td>    <td>optional</td>  <td>MeasureDescription to write after the introductory paragraph.</td></tr>
  *   <tr><td>{@code OBJECTS.KIND}</td>   <td></td>          <td>Kind of objects listed in the page (e.g. <cite>"Operation Methods"</cite>).</td></tr>
  *   <tr><td>{@code PRODUCT.NAME}</td>   <td></td>          <td>Name of the product for which the report is generated.</td></tr>
  *   <tr><td>{@code PRODUCT.VERSION}</td><td></td>          <td>Version of the product for which the report is generated.</td></tr>

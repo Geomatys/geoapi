@@ -47,6 +47,6 @@ import static org.opengis.annotation.Specification.*;
  * @since   2.0
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_ThematicAccuracy", specification=ISO_19157)
-public interface ThematicAccuracy extends Element {
+@UML(identifier="ThematicAccuracy", specification=ISO_19157)
+public interface ThematicAccuracy extends QualityElement {
 }

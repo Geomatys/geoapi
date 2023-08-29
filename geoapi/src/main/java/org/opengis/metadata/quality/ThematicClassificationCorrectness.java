@@ -94,6 +94,6 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_ThematicClassificationCorrectness", specification=ISO_19157)
+@UML(identifier="ThematicClassificationCorrectness", specification=ISO_19157)
 public interface ThematicClassificationCorrectness extends ThematicAccuracy {
 }

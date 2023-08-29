@@ -30,7 +30,7 @@ import static org.opengis.annotation.Specification.*;
 
 /**
  * Description of the evaluation method and procedure applied.
- * Data quality evaluation method should be included for each applied {@linkplain Element data quality measure}.
+ * Data quality evaluation method should be included for each applied {@linkplain QualityElement data quality measure}.
  * It describes, or references documentation describing, the methodology used to apply a data quality measure
  * to the data specified by a {@linkplain DataQuality#getScope() data quality scope}.
  * {@code EvaluationMethod} can be specialized with {@link DataEvaluation} or {@link AggregationDerivation} subtypes.
@@ -39,12 +39,23 @@ import static org.opengis.annotation.Specification.*;
  * @author  Martin Desruisseaux (Geomatys)
  * @version 3.1
  *
- * @see Element#getEvaluationMethod()
+ * @see QualityElement#getEvaluationMethod()
  *
  * @since 3.1
  */
-@UML(identifier="DQ_EvaluationMethod", specification=ISO_19157)
+@UML(identifier="EvaluationMethod", specification=ISO_19157)
 public interface EvaluationMethod {
+    /**
+     * Name of the evaluation method.
+     *
+     * @return name of the evaluation method.
+     *
+     */
+    @UML(identifier="name", obligation=OPTIONAL, specification=ISO_19157)
+    default InternationalString getName()  {
+        return null;
+    }
+
     /**
      * Type of method used to evaluate quality of the data.
      *
@@ -100,4 +111,12 @@ public interface EvaluationMethod {
     default Collection<? extends Temporal> getDates() {
         return Collections.emptyList();
     }
+
+    /**
+     * Information on which data are used as sources in deductive evaluation method.
+     *
+     * @return information on which data are used.
+     */
+    @UML(identifier="deductiveSource", obligation=OPTIONAL, specification=ISO_19157)
+    default InternationalString getDeductiveSource() { return null; }
 }

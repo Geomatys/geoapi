@@ -29,7 +29,7 @@ import static org.opengis.annotation.Specification.*;
  *
  * <h2>Standardized values</h2>
  * In order to achieve well defined and comparable quality information, it is recommended to
- * report data quality using {@linkplain Measure quality measures} listed in ISO 19157 annex.
+ * report data quality using {@linkplain QualityMeasure quality measures} listed in ISO 19157 annex.
  * The following table provides a summary adapted to GeoAPI objects;
  * see ISO 19157 for more complete descriptions and formulas.
  * All identifiers should be in "ISO 19157" namespace.
@@ -39,9 +39,9 @@ import static org.opengis.annotation.Specification.*;
  *   <tr>
  *     <th>{@linkplain MeasureReference#getMeasureIdentification() Identifier}</th>
  *     <th>{@linkplain MeasureReference#getNamesOfMeasure() Name of measure}</th>
- *     <th>{@linkplain Measure#getAliases() Aliases}</th>
- *     <th>{@linkplain Measure#getParameters() Parameters}</th>
- *     <th>{@linkplain Measure#getValueType() Value type}</th>
+ *     <th>{@linkplain QualityMeasure#getAliases() Aliases}</th>
+ *     <th>{@linkplain QualityMeasure#getParameters() Parameters}</th>
+ *     <th>{@linkplain QualityMeasure#getValueType() Value type}</th>
  *   </tr><tr>
  *     <td>52</td>
  *     <td>relative vertical error</td>
@@ -57,7 +57,7 @@ import static org.opengis.annotation.Specification.*;
  *   </tr>
  * </table>
  *
- * <p>{@linkplain Measure#getDefinition() Definitions}:</p>
+ * <p>{@linkplain QualityMeasure#getDefinition() Definitions}:</p>
  * <ol start="52">
  *   <li>Evaluation of the random errors of one relief feature to another in the same data set or on the same map/chart.</li>
  *   <li>Evaluation of the random errors in the horizontal position of one feature to another in the same data set or on the same map/chart.</li>
@@ -68,6 +68,6 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_RelativeInternalPositionalAccuracy", specification=ISO_19157)
-public interface RelativeInternalPositionalAccuracy extends PositionalAccuracy {
+@UML(identifier="RelativePositionalAccuracy", specification=ISO_19157)
+public interface RelativePositionalAccuracy extends PositionalAccuracy {
 }

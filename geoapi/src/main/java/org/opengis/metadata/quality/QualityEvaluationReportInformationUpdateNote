@@ -1,0 +1,10 @@
+Note on update for ISO 19157-1:2023 :
+
+For the QualityEvaluationReportInformation interface, the property getOnlineResource() returns a DS_Resource <<Abstract>>
+defined in ISO 19115-1:2014. This object is not derived in GeoApi yet, and is complicated to derive, as all DS_Resources are.
+
+Another property in the same interface, getReportReference(), should be have been conditional to getOnlineResource().
+More specifically, if one property is not provided, the other should be provided.
+
+For now, the property getOnlineResource() is merely skipped, and getReportReference() obligation is left unchanged
+(i.e. stays mandatory).

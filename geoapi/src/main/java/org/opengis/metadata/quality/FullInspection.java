@@ -36,6 +36,6 @@ import static org.opengis.annotation.Specification.*;
  *
  * @since 3.1
  */
-@UML(identifier="DQ_FullInspection", specification=ISO_19157)
+@UML(identifier="FullInspection", specification=ISO_19157)
 public interface FullInspection extends DataEvaluation {
 }

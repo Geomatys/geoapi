@@ -27,27 +27,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
- * Tests {@link Element}.
+ * Tests {@link QualityElement}.
  *
  * @author  Martin Desruisseaux (Geomatys)
  * @version 3.1
  * @since   3.1
  */
-public final class ElementTest {
+public final class QualityElementTest {
     /**
      * Creates a new test case.
      */
-    public ElementTest() {
+    public QualityElementTest() {
     }
 
     /**
-     * Tests {@link Element#getDates()}.
+     * Tests {@link QualityElement#getDates()}.
      */
     @Test
     public void testGetDates() {
         final Instant   startTime = Instant.parse("2009-05-08T14:10:00Z");
         final Instant     endTime = Instant.parse("2009-05-12T21:45:00Z");
-        final ElementImpl element = new ElementImpl(new EvaluationMethodImpl(startTime, endTime));
+        final QualityElementImpl element = new QualityElementImpl(new EvaluationMethodImpl(startTime, endTime));
 
         @SuppressWarnings("deprecation")
         final Collection<? extends Date> dates = element.getDates();

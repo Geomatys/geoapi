@@ -161,14 +161,14 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   3.1
  */
-@UML(identifier="DQM_BasicMeasure", specification=ISO_19157)
+@UML(identifier="BasicMeasure", specification=ISO_19157)
 public interface BasicMeasure {
     /**
      * Name of the data quality basic measure applied to the data.
      *
      * @return name of the data quality basic measure.
      *
-     * @see Measure#getName()
+     * @see QualityMeasure#getName()
      */
     @UML(identifier="name", obligation=MANDATORY, specification=ISO_19157)
     InternationalString getName();
@@ -178,7 +178,7 @@ public interface BasicMeasure {
      *
      * @return definition of the data quality basic measure.
      *
-     * @see Measure#getDefinition()
+     * @see QualityMeasure#getDefinition()
      */
     @UML(identifier="definition", obligation=MANDATORY, specification=ISO_19157)
     InternationalString getDefinition();
@@ -188,10 +188,10 @@ public interface BasicMeasure {
      *
      * @return usage example, or {@code null} if none.
      *
-     * @see Measure#getExamples()
+     * @see QualityMeasure#getExamples()
      */
     @UML(identifier="example", obligation=OPTIONAL, specification=ISO_19157)
-    default Description getExample() {
+    default MeasureDescription getExample() {
         return null;
     }
 
@@ -200,7 +200,7 @@ public interface BasicMeasure {
      *
      * @return value type of the result for the basic measure.
      *
-     * @see Measure#getValueType()
+     * @see QualityMeasure#getValueType()
      */
     @UML(identifier="valueType", obligation=MANDATORY, specification=ISO_19157)
     TypeName getValueType();

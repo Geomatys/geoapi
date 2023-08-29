@@ -33,6 +33,6 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   3.1
  */
-@UML(identifier="DQ_AggregationDerivation", specification=ISO_19157)
+@UML(identifier="AggregationDerivation", specification=ISO_19157)
 public interface AggregationDerivation extends EvaluationMethod {
 }

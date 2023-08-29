@@ -18,7 +18,7 @@
 package org.opengis.observation;
 
 import org.opengis.metadata.Metadata;
-import org.opengis.metadata.quality.Element;
+import org.opengis.metadata.quality.QualityElement;
 import org.opengis.temporal.TemporalObject;
 import org.opengis.annotation.UML;
 
@@ -71,7 +71,7 @@ public interface Observation {
      * Allow multiple quality measures if required.
      */
     @UML(identifier="resultQuality", obligation=OPTIONAL, specification=OGC_07022)
-    Element getQuality();
+    QualityElement getQuality();
 
     @UML(identifier="metadata", obligation=OPTIONAL, specification=OGC_07022)
     Metadata getObservationMetadata();

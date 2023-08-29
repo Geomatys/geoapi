@@ -10,10 +10,10 @@ org.opengis.metadata.extent.TemporalExtent
 org.opengis.metadata.identification.AssociatedResource
 org.opengis.metadata.identification.Identification
 org.opengis.metadata.quality.Completeness
-org.opengis.metadata.quality.Element
+org.opengis.metadata.quality.QualityElement
 org.opengis.metadata.quality.LogicalConsistency
 org.opengis.metadata.quality.PositionalAccuracy
-org.opengis.metadata.quality.Result
+org.opengis.metadata.quality.QualityResult
 org.opengis.metadata.quality.TemporalAccuracy
 org.opengis.metadata.quality.ThematicAccuracy
 org.opengis.metadata.spatial.GeolocationInformation

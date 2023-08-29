@@ -32,6 +32,6 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   3.1
  */
-@UML(identifier="DQ_Confidence", specification=ISO_19157)
+@UML(identifier="Confidence", specification=ISO_19157)
 public interface Confidence extends Metaquality {
 }

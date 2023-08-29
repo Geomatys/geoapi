@@ -44,17 +44,13 @@ import static org.opengis.annotation.Obligation.*;
  * @since   3.1
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_Metaquality", specification=ISO_19157)
-public interface Metaquality extends Element {
+@UML(identifier="Metaquality", specification=ISO_19157)
+public interface Metaquality extends QualityElement {
     /**
-     * Derived element (mandatory).
-     * The returned collection shall contain exactly 1 element.
+     * Quality elements related to metaquality.
      *
-     * @return the element that is derived.
-     *
-     * @todo Renamed in 19157:2022: {@code relatedQualityElement}.
+     * @return metaquality related quality elements.
      */
-    @Override
-    @UML(identifier="derivedElement", obligation=MANDATORY, specification=ISO_19157)
-    Collection<? extends Element> getDerivedElements();
+    @UML(identifier="relatedQualityElement", obligation=MANDATORY, specification=ISO_19157)
+    Collection<? extends QualityElement> getRelatedQualityElements();
 }

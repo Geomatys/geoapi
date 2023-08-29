@@ -36,6 +36,6 @@ import static org.opengis.annotation.Specification.*;
  */
 @Deprecated
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_TemporalAccuracy", specification=ISO_19115, version=2003)
+@UML(identifier="TemporalAccuracy", specification=ISO_19115, version=2003)
 public interface TemporalAccuracy extends TemporalQuality {
 }

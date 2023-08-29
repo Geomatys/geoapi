@@ -29,7 +29,7 @@ import static org.opengis.annotation.Specification.*;
 
 /**
  * Base interface of more specific result classes.
- * At least one data quality result shall be provided for each {@linkplain Element data quality element}.
+ * At least one data quality result shall be provided for each {@linkplain QualityElement data quality element}.
  * Different types of results can be provided for the same data quality elements. This could be
  * a {@linkplain QuantitativeResult quantitative result},
  * a {@linkplain ConformanceResult conformance result},
@@ -40,20 +40,18 @@ import static org.opengis.annotation.Specification.*;
  * @author  Alexis Gaillard (Geomatys)
  * @version 3.1
  *
- * @see Element#getResults()
+ * @see QualityElement#getQualityResults()
  *
  * @since 2.0
- *
- * @todo Renamed in 19157:2022: {@code QualityResult}.
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_Result", specification=ISO_19157)
-public interface Result {
+@UML(identifier="QualityResult", specification=ISO_19157)
+public interface QualityResult {
     /**
      * Scope of the result.
      * Quality frequently differs between various parts of the data set for which quality is evaluated.
-     * Therefore several evaluations may be applied for the same {@linkplain Element data quality element}.
-     * To avoid repeating the measure and evaluation procedure descriptions in several instances of {@link Element},
+     * Therefore several evaluations may be applied for the same {@linkplain QualityElement data quality element}.
+     * To avoid repeating the measure and evaluation procedure descriptions in several instances of {@link QualityElement},
      * several results with individual result scopes can be used.
      *
      * @return scope of the result, or {@code null} if unspecified.

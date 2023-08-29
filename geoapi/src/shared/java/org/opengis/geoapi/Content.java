@@ -17,6 +17,8 @@
  */
 package org.opengis.geoapi;
 
+import org.opengis.metadata.quality.MeasureDescription;
+
 import java.lang.reflect.Type;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -152,15 +154,16 @@ public enum Content {
                org.opengis.metadata.lineage        .ProcessStep                         .class,
                org.opengis.metadata.lineage        .Lineage                             .class,
                org.opengis.metadata.quality        .Scope                               .class,
-               org.opengis.metadata.quality        .StandaloneQualityReportInformation  .class,
-               org.opengis.metadata.quality        .Result                              .class,
+               org.opengis.metadata.quality        .QualityResult                       .class,
                org.opengis.metadata.quality        .EvaluationMethod                    .class,
                org.opengis.metadata.quality        .SourceReference                     .class,
-               org.opengis.metadata.quality        .Description                         .class,
+               org.opengis.metadata.quality        .FormulaType                         .class,
+               org.opengis.metadata.quality        .MeasureDescription                  .class,
                org.opengis.metadata.quality        .BasicMeasure                        .class,
-               org.opengis.metadata.quality        .Measure                             .class,
+               org.opengis.metadata.quality        .QualityMeasure                      .class,
                org.opengis.metadata.quality        .MeasureReference                    .class,
-               org.opengis.metadata.quality        .Element                             .class,
+               org.opengis.metadata.quality        .QualityElement                      .class,
+               org.opengis.metadata.quality        .QualityEvaluationReportInformation  .class,
                org.opengis.metadata.quality        .DataQuality                         .class,
                org.opengis.metadata.quality        .TemporalQuality                     .class,
                org.opengis.metadata.quality        .Metaquality                         .class,
@@ -175,9 +178,9 @@ public enum Content {
                org.opengis.metadata.quality        .DescriptiveResult                   .class,
                org.opengis.metadata.quality        .AggregationDerivation               .class,
                org.opengis.metadata.quality        .PositionalAccuracy                  .class,
-               org.opengis.metadata.quality        .AbsoluteExternalPositionalAccuracy  .class,
+               org.opengis.metadata.quality        .AbsolutePositionalAccuracy          .class,
                org.opengis.metadata.quality        .GriddedDataPositionalAccuracy       .class,
-               org.opengis.metadata.quality        .RelativeInternalPositionalAccuracy  .class,
+               org.opengis.metadata.quality        .RelativePositionalAccuracy          .class,
                org.opengis.metadata.quality        .TemporalAccuracy                    .class,
                org.opengis.metadata.quality        .TemporalConsistency                 .class,
                org.opengis.metadata.quality        .TemporalValidity                    .class,
@@ -193,8 +196,8 @@ public enum Content {
                org.opengis.metadata.quality        .FormatConsistency                   .class,
                org.opengis.metadata.quality        .TopologicalConsistency              .class,
                org.opengis.metadata.quality        .Completeness                        .class,
-               org.opengis.metadata.quality        .CompletenessCommission              .class,
-               org.opengis.metadata.quality        .CompletenessOmission                .class,
+               org.opengis.metadata.quality        .Commission                          .class,
+               org.opengis.metadata.quality        .Omission                            .class,
                org.opengis.metadata.quality        .ConformanceResult                   .class,
                org.opengis.metadata.quality        .CoverageResult                      .class,
                org.opengis.metadata.quality        .QuantitativeResult                  .class,
@@ -353,6 +356,7 @@ public enum Content {
             org.opengis.metadata.maintenance    .MaintenanceFrequency         .class,
             org.opengis.metadata.maintenance    .ScopeCode                    .class,
             org.opengis.metadata.quality        .EvaluationMethodType         .class,
+            org.opengis.metadata.quality        .FormulaLanguage              .class,
             org.opengis.metadata.quality        .ValueStructure               .class,
             org.opengis.metadata.spatial        .CellGeometry                 .class,
             org.opengis.metadata.spatial        .DimensionNameType            .class,

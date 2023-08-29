@@ -17,11 +17,7 @@
  */
 package org.opengis.metadata.quality;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.AbstractCollection;
+import java.util.*;
 import java.time.Instant;
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
@@ -43,7 +39,7 @@ import static org.opengis.annotation.Specification.*;
  * <ul>
  *   <li>{@linkplain #getMeasureReference() Measure}: the type of evaluation;</li>
  *   <li>{@linkplain #getEvaluationMethod() Evaluation method}: the procedure used to evaluate the measure;</li>
- *   <li>{@linkplain #getResults() Result:} the output of the evaluation.</li>
+ *   <li>{@linkplain #getQualityResults() Result:} the output of the evaluation.</li>
  * </ul>
  *
  * Elements are organized into different categories, which are identified by the following subtypes:
@@ -55,12 +51,10 @@ import static org.opengis.annotation.Specification.*;
  * @author  Alexis Gaillard (Geomatys)
  * @version 3.1
  * @since   2.0
- *
- * @todo Renamed in 19157:2022: {@code QualityElement}.
  */
 @Classifier(Stereotype.ABSTRACT)
-@UML(identifier="DQ_Element", specification=ISO_19157)
-public interface Element {
+@UML(identifier="QualityElement", specification=ISO_19157)
+public interface QualityElement {
     /**
      * Clause in the standalone quality report where this data quality element is described.
      * May apply to any related data quality element (original results in case of derivation or aggregation).
@@ -69,13 +63,13 @@ public interface Element {
      *
      * @since 3.1
      *
-     * @todo Renamed in 19157:2022: {@code QualityEvaluationReportDetails}.
+     * @deprecated Replaced by {@link QualityEvaluationReportInformation#getQualityEvaluationReportDetails()}.
      */
-    @UML(identifier="standaloneQualityReportDetails", obligation=OPTIONAL, specification=ISO_19157)
+    @Deprecated
+    @UML(identifier="standaloneQualityReportDetails", obligation=OPTIONAL, specification=ISO_19157, version=2013)
     default InternationalString getStandaloneQualityReportDetails() {
         return null;
     }
-
     /**
      * Full description of a data quality measure.
      *
@@ -85,7 +79,7 @@ public interface Element {
      *   that clients can use for finding the full measure description in a measure register or catalogue.
      *   Because Java interfaces can execute code (as opposed to static data encoded in XML or JSON documents),
      *   implementers are free to do themselves the work of fetching this information from an external source
-     *   when {@code getMeasure()} is invoked. This method is added in the {@link Element} interface for making
+     *   when {@code getMeasure()} is invoked. This method is added in the {@link QualityElement} interface for making
      *   that feature possible. This is an optional feature; implementers can ignore this method and implement
      *   only the {@link #getMeasureReference()} method.
      *
@@ -93,36 +87,33 @@ public interface Element {
      *
      * @since 3.1
      */
-    default Measure getMeasure() {
+    default QualityMeasure getMeasure() {
         return null;
     }
 
     /**
      * Identifier of a measure fully described elsewhere.
      * The full description is given by {@link #getMeasure()},
-     * but that description may not be available to this {@code Element}.
+     * but that description may not be available to this {@code QualityElement}.
      * Instead, the whole description may be found within a measure register or catalogue,
      * in which case this reference can be used for finding the whole description.
      *
      * <p>If a full measure is {@linkplain #getMeasure() contained in this element},
-     * then by default this method returns the {@linkplain Measure#getName() name},
-     * {@linkplain Measure#getMeasureIdentifier() identifier} and
-     * {@linkplain Measure#getDefinition() definition} of that measure.</p>
+     * then by default this method returns the {@linkplain QualityMeasure#getName() name},
+     * {@linkplain QualityMeasure#getMeasureIdentifier() identifier} and
+     * {@linkplain QualityMeasure#getDefinition() definition} of that measure.</p>
      *
      * @departure rename
      *   The ISO 19157 property name is {@code measure}.
      *   This is renamed {@code measureReference} in GeoAPI for reflecting the return type
-     *   and for making room for a {@code measure} property for the full {@link Measure} description.
+     *   and for making room for a {@code measure} property for the full {@link QualityMeasure} description.
      *
-     * @return reference to the measure used, or {@code null} if none.
+     * @return reference to the measure used.
      *
      * @since 3.1
      */
-    @UML(identifier="measure", obligation=OPTIONAL, specification=ISO_19157)
-    default MeasureReference getMeasureReference() {
-        final Measure measure = getMeasure();
-        return (measure == null) ? null : new MeasureInstanceReference(measure);
-    }
+    @UML(identifier="measure", obligation=MANDATORY, specification=ISO_19157)
+    MeasureReference getMeasureReference();
 
     /**
      * Name of the test applied to the data.
@@ -167,13 +158,26 @@ public interface Element {
     }
 
     /**
+     * Evaluation information, recognising that there can be a collection of methods.
+     *
+     * @return information about the evaluation method.
+     *
+     * @since 4.0
+     */
+    @UML(identifier="evaluationMethod", obligation=MANDATORY, specification=ISO_19157)
+    Collection<? extends EvaluationMethod> getEvaluationMethods();
+
+    /**
      * Evaluation information.
      *
      * @return information about the evaluation method, or {@code null} if none.
      *
+     * @deprecated Replaced by {@link #getEvaluationMethods()}.
+     *
      * @since 3.1
      */
-    @UML(identifier="evaluationMethod", obligation=OPTIONAL, specification=ISO_19157)
+    @Deprecated
+    @UML(identifier="evaluationMethod", obligation=OPTIONAL, specification=ISO_19157, version=2013)
     default EvaluationMethod getEvaluationMethod() {
         return null;
     }
@@ -273,17 +277,17 @@ public interface Element {
      * @return set of values obtained from applying a data quality measure.
      */
     @UML(identifier="result", obligation=MANDATORY, specification=ISO_19157)
-    Collection<? extends Result> getResults();
+    Collection<? extends QualityResult> getQualityResults();
 
     /**
      * In case of aggregation or derivation, indicates the original elements.
      *
-     * @return original element(s) when there is an aggregation or derivation.
+     * @return original element(s) when there is an aggregation or derivation, or {@code null}.
      *
      * @since 3.1
      */
     @UML(identifier="derivedElement", obligation=OPTIONAL, specification=ISO_19157)
-    default Collection<? extends Element> getDerivedElements() {
+    default Collection<? extends QualityElement> getDerivedElements() {
         return Collections.emptyList();
     }
 }

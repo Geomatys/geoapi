@@ -28,7 +28,7 @@ import static org.opengis.annotation.Specification.*;
  *
  * <h2>Standardized values</h2>
  * In order to achieve well defined and comparable quality information, it is recommended to
- * report data quality using {@linkplain Measure quality measures} listed in ISO 19157 annex.
+ * report data quality using {@linkplain QualityMeasure quality measures} listed in ISO 19157 annex.
  * The following table provides a summary; see ISO 19157 for more complete descriptions and examples.
  * All identifiers should be in "ISO 19157" namespace.
  *
@@ -37,8 +37,8 @@ import static org.opengis.annotation.Specification.*;
  *   <tr>
  *     <th>{@linkplain MeasureReference#getMeasureIdentification() Identifier}</th>
  *     <th>{@linkplain MeasureReference#getNamesOfMeasure() Name of measure}</th>
- *     <th>{@linkplain Measure#getBasicMeasure() Basic measure}</th>
- *     <th>{@linkplain Measure#getValueType() Value type}</th>
+ *     <th>{@linkplain QualityMeasure#getBasicMeasure() Basic measure}</th>
+ *     <th>{@linkplain QualityMeasure#getValueType() Value type}</th>
  *     <th>Remarks</th>
  *   </tr><tr>
  *     <td>1</td>
@@ -67,7 +67,7 @@ import static org.opengis.annotation.Specification.*;
  *   </tr>
  * </table>
  *
- * <p>{@linkplain Measure#getDefinition() Definitions}:</p>
+ * <p>{@linkplain QualityMeasure#getDefinition() Definitions}:</p>
  * <ol start="1">
  *   <li>Indication that an item is incorrectly present in the data.</li>
  *   <li>Number of items within the data set or sample that should not have been present.</li>
@@ -79,12 +79,10 @@ import static org.opengis.annotation.Specification.*;
  * @author  Alexis Gaillard (Geomatys)
  * @version 3.1
  *
- * @see CompletenessOmission
+ * @see Omission
  *
  * @since 2.0
- *
- * @todo Renamed in 19157:2022: {@code Commission}.
  */
-@UML(identifier="DQ_CompletenessCommission", specification=ISO_19157)
-public interface CompletenessCommission extends Completeness {
+@UML(identifier="Commission", specification=ISO_19157)
+public interface Commission extends Completeness {
 }

@@ -89,6 +89,6 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_AccuracyOfATimeMeasurement", specification=ISO_19157)
+@UML(identifier="AccuracyOfATimeMeasurement", specification=ISO_19157)
 public interface AccuracyOfATimeMeasurement extends TemporalQuality, TemporalAccuracy {
 }

@@ -38,12 +38,12 @@ import static org.opengis.annotation.Specification.ISO_19115;
  * @version 3.1
  * @since   2.0
  *
- * @deprecated As of ISO 19115:2014, {@code DQ_Scope} has been replaced by {@code MD_Scope}.
- *             The later is defined in the {@link org.opengis.metadata.maintenance} package.
+ * @deprecated As of ISO 19115:2014, {@code Scope} has been replaced by {@code MD_Scope}.
+ *             The latter is defined in the {@link org.opengis.metadata.maintenance} package.
  */
 @Deprecated
 @Classifier(Stereotype.DATATYPE)
-@UML(identifier="DQ_Scope", specification=ISO_19115, version=2003)
+@UML(identifier="Scope", specification=ISO_19115, version=2003)
 public interface Scope extends org.opengis.metadata.maintenance.Scope {
     /**
      * Hierarchical level of the data specified by the scope.

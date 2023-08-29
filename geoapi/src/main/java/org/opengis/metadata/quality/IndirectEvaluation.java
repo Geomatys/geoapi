@@ -42,7 +42,7 @@ import static org.opengis.annotation.Specification.*;
  *
  * @since 3.1
  */
-@UML(identifier="DQ_IndirectEvaluation", specification=ISO_19157)
+@UML(identifier="IndirectEvaluation", specification=ISO_19157)
 public interface IndirectEvaluation extends DataEvaluation {
     /**
      * Information on which data are used as sources in deductive evaluation method.

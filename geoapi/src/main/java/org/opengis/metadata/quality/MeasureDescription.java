@@ -21,6 +21,8 @@ import org.opengis.util.InternationalString;
 import org.opengis.annotation.UML;
 import org.opengis.metadata.identification.BrowseGraphic;
 
+import java.util.Collection;
+
 import static org.opengis.annotation.Obligation.*;
 import static org.opengis.annotation.Specification.*;
 
@@ -33,11 +35,9 @@ import static org.opengis.annotation.Specification.*;
  * @author  Martin Desruisseaux (Geomatys)
  * @version 3.1
  * @since   3.1
- *
- * @todo Renamed in 19157:2022: {@code MeasureDescription}.
  */
-@UML(identifier="DQM_Description", specification=ISO_19157)
-public interface Description {
+@UML(identifier="MeasureDescription", specification=ISO_19157)
+public interface MeasureDescription {
     /**
      * Text description.
      *
@@ -53,6 +53,18 @@ public interface Description {
      */
     @UML(identifier="extendedDescription", obligation=OPTIONAL, specification=ISO_19157)
     default BrowseGraphic getExtendedDescription() {
+        return null;
+    }
+
+    /**
+     * Description of formulas used for quality measure.
+     *
+     * @since 4.0
+     *
+     * @return formulas description, or {@code null} if none.
+     */
+    @UML(identifier="formula", obligation=OPTIONAL, specification=ISO_19157)
+    default Collection<? extends FormulaType> getFormulas() {
         return null;
     }
 }

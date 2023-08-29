@@ -636,7 +636,7 @@ public strictfp abstract class TransformTestCase extends TestCase {
         final double[] expectedDoubles = new double[expectedFloats.length];
         /*
          * Copies the source coordinates (to be used later) and performs the transformations using
-         * MathTransform.transform(DirectPosition) method. Result is stored in the "transformed"
+         * MathTransform.transform(DirectPosition) method. QualityResult is stored in the "transformed"
          * array and will not be modified anymore from that point.
          */
         for (int i=0; i<sourceDoubles.length; i++) {

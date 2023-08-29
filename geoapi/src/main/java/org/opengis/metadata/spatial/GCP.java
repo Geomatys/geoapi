@@ -22,7 +22,7 @@ import java.util.Collections;
 
 import org.opengis.annotation.UML;
 import org.opengis.geometry.DirectPosition;
-import org.opengis.metadata.quality.Element;
+import org.opengis.metadata.quality.QualityElement;
 
 import static org.opengis.annotation.Obligation.*;
 import static org.opengis.annotation.Specification.*;
@@ -51,7 +51,7 @@ public interface GCP {
      * @return accuracy of a ground control point.
      */
     @UML(identifier="accuracyReport", obligation=OPTIONAL, specification=ISO_19115_2)
-    default Collection<? extends Element> getAccuracyReports() {
+    default Collection<? extends QualityElement> getAccuracyReports() {
         return Collections.emptyList();
     }
 }

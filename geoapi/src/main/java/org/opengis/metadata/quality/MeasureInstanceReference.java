@@ -24,18 +24,18 @@ import org.opengis.util.InternationalString;
 
 
 /**
- * A {@link MeasureReference} which delegates all methods to an existing {@link Measure} instance.
- * This is used when an {@link Element} provides a full measure description instead of a reference
+ * A {@link MeasureReference} which delegates all methods to an existing {@link QualityMeasure} instance.
+ * This is used when an {@link QualityElement} provides a full measure description instead of a reference
  * to a registry.
  *
  * <h2>Purpose</h2>
- * ISO 19157 provides no way to get a {@link Measure} from an {@link Element} or any other data quality object.
- * The only association defined by the standard is a {@link MeasureReference} property inside {@link Element}.
+ * ISO 19157 provides no way to get a {@link QualityMeasure} from an {@link QualityElement} or any other data quality object.
+ * The only association defined by the standard is a {@link MeasureReference} property inside {@link QualityElement}.
  * The standard expects that users will look for that reference in a registry or catalog for getting the full
- * {@link Measure} object. This approach makes XML documents smaller, but is not needed for Java interfaces.
- * GeoAPI extends ISO 19157 by allowing implementers to provide {@link Measure} objects directly.
- * This {@code MeasureReferenceToInstance} class makes the ask easier for implementers who choose to provide a
- * {@link Measure} instead of a {@link MeasureReference}, by inferring automatically the latter from the former.
+ * {@link QualityMeasure} object. This approach makes XML documents smaller, but is not needed for Java interfaces.
+ * GeoAPI extends ISO 19157 by allowing implementers to provide {@link QualityMeasure} objects directly.
+ * This {@code MeasureReferenceToInstance} class makes the task easier for implementers who choose to provide a
+ * {@link QualityMeasure} instead of a {@link MeasureReference}, by inferring automatically the latter from the former.
  *
  * @author  Martin Desruisseaux (Geomatys)
  * @version 3.1
@@ -48,14 +48,14 @@ final class MeasureInstanceReference implements MeasureReference {
     /**
      * The full measure object from which to derive a reference.
      */
-    private final Measure measure;
+    private final QualityMeasure measure;
 
     /**
      * Creates a new {@code MeasureReference} from the given full measure object.
      *
      * @param  measure  the full measure object from which to derive a reference.
      */
-    MeasureInstanceReference(final Measure measure) {
+    MeasureInstanceReference(final QualityMeasure measure) {
         this.measure = measure;
     }
 
@@ -77,22 +77,40 @@ final class MeasureInstanceReference implements MeasureReference {
     }
 
     /**
-     * Returns a description of the measure. This method delegates to the measure <em>definition</em>
+     * Returns descriptions of the measure. This method delegates to the measure <em>definition</em>
      * instead of the measure description because the definition is a small text while the description
      * is very verbose, including formulas, which does not seem to be the intent of this method.
      * The examples given in annex E of ISO 19157:2013 contains the definitions, not the descriptions,
      * of standard measures defined in annex D.
+     *
+     *  @deprecated Replaced by {@link #getMeasuresDescription()} as of ISO 19157:2023.
      */
     @Override
+    @Deprecated(forRemoval = true, since = "ISO 19157:2023")
     public InternationalString getMeasureDescription() {
         InternationalString def = measure.getDefinition();
         if (def == null) {
-            final Description description = measure.getDescription();
+            final MeasureDescription description = measure.getDescription();
             if (description != null) {
                 def = description.getTextDescription();
             }
         }
         return def;
+    }
+
+    //todo : validation of suggestion proposed: measure definition {@linkplain QualityMeasure.#getDefinitions()} is mandatory,
+    // so it can not be null if specification is respected. Hence it is very unlikely that there is a need for calling
+    // {@linkplain QualityMeasure.#getDescriptions()} and it seems logical to return directly this method result.
+    // If accepted, this method should be renamed to override {@linkplain MeasureReference.#getMeasureDescription()}.
+    /**
+     * Returns descriptions of the measure. This method delegates to the measure <em>definition</em>
+     * instead of the measure description because the definition is a small text while the description
+     * is very verbose, including formulas, which does not seem to be the intent of this method.
+     * The examples given in annex E of ISO 19157:2013 contains the definitions, not the descriptions,
+     * of standard measures defined in annex D.
+     */
+    public InternationalString getMeasuresDescription() {
+        return measure.getDefinition();
     }
 
     /**

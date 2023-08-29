@@ -156,6 +156,12 @@ public final class DescriptionsTest {
                 for (final Method method : type.getDeclaredMethods()) {
                     uml = method.getAnnotation(UML.class);
                     if (uml != null) {
+                        if ((uml.identifier().equals("evaluationMethod") || uml.identifier().equals("description"))
+                                && uml.version() == 2013) {
+                            // Special cases: we skip deprecated methods which are replaced by another method
+                            // declared in the same interface
+                            continue;
+                        }
                         final String identifier = classIdentifier + '.' + uml.identifier();
                         assertResourceExists(resources, identifier);
                         assertTrue(keys.remove(identifier), identifier);

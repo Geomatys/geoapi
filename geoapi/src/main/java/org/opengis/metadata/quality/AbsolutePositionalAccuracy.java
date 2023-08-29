@@ -38,7 +38,7 @@ import static org.opengis.annotation.Specification.*;
  *
  * <h2>Standardized values</h2>
  * In order to achieve well defined and comparable quality information, it is recommended to
- * report data quality using {@linkplain Measure quality measures} listed in ISO 19157 annex.
+ * report data quality using {@linkplain QualityMeasure quality measures} listed in ISO 19157 annex.
  * The following table provides a summary adapted to GeoAPI objects;
  * see ISO 19157 for more complete descriptions and formulas.
  * All identifiers should be in "ISO 19157" namespace.
@@ -48,10 +48,10 @@ import static org.opengis.annotation.Specification.*;
  *   <tr>
  *     <th>{@linkplain MeasureReference#getMeasureIdentification() Identifier}</th>
  *     <th>{@linkplain MeasureReference#getNamesOfMeasure() Name of measure}</th>
- *     <th>{@linkplain Measure#getAliases() Aliases}</th>
- *     <th>{@linkplain Measure#getBasicMeasure() Basic measure}</th>
- *     <th>{@linkplain Measure#getParameters() Parameters}</th>
- *     <th>{@linkplain Measure#getValueType() Value type}</th>
+ *     <th>{@linkplain QualityMeasure#getAliases() Aliases}</th>
+ *     <th>{@linkplain QualityMeasure#getBasicMeasure() Basic measure}</th>
+ *     <th>{@linkplain QualityMeasure#getParameters() Parameters}</th>
+ *     <th>{@linkplain QualityMeasure#getValueType() Value type}</th>
  *   </tr><tr>
  *     <td>28</td>
  *     <td>mean value of positional uncertainties (1D, 2D and 3D)</td>
@@ -235,7 +235,7 @@ import static org.opengis.annotation.Specification.*;
  * For an object oriented language like Java, a more natural approach is to use an object of specific type for the value.
  * </p>
  *
- * <p>{@linkplain Measure#getDefinition() Definitions}:</p>
+ * <p>{@linkplain QualityMeasure#getDefinition() Definitions}:</p>
  * <ol start="28">
  *   <li>Mean value of the distance between a measured position and what is considered as the corresponding true position.</li>
  *   <li value="128">Deviation between a measured position and what is considered as the corresponding true position.</li>
@@ -272,6 +272,6 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_AbsoluteExternalPositionalAccuracy", specification=ISO_19157)
-public interface AbsoluteExternalPositionalAccuracy extends PositionalAccuracy {
+@UML(identifier="AbsolutePositionalAccuracy", specification=ISO_19157)
+public interface AbsolutePositionalAccuracy extends PositionalAccuracy {
 }

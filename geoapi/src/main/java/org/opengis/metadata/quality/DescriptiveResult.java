@@ -27,7 +27,7 @@ import static org.opengis.annotation.Specification.*;
 /**
  * Data quality descriptive result.
  * In some cases, it is not possible to produce a {@linkplain QuantitativeResult quantitative result}
- * for a {@linkplain Element data quality element}. A subjective evaluation of an element can then be
+ * for a {@linkplain QualityElement data quality element}. A subjective evaluation of an element can then be
  * expressed with a textual statement as a data quality descriptive result.
  * This descriptive result can also be used to provide a short synthetic description of the result
  * of the data quality evaluation, to accompany the complete quantitative result.
@@ -37,8 +37,8 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   3.1
  */
-@UML(identifier="DQ_DescriptiveResult", specification=ISO_19157)
-public interface DescriptiveResult extends Result {
+@UML(identifier="DescriptiveResult", specification=ISO_19157)
+public interface DescriptiveResult extends QualityResult {
     /**
      * Textual expression of the descriptive result.
      *

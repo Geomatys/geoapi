@@ -34,7 +34,7 @@ import static org.opengis.annotation.Specification.*;
  * @version 3.1
  * @since   2.0
  */
-@UML(identifier="DQ_EvaluationMethodTypeCode", specification=ISO_19157)
+@UML(identifier="EvaluationMethodTypeCode", specification=ISO_19157)
 public final class EvaluationMethodType extends CodeList<EvaluationMethodType> {
     /**
      * Serial number for compatibility with different versions.
@@ -89,7 +89,7 @@ public final class EvaluationMethodType extends CodeList<EvaluationMethodType> {
     }
 
     /**
-     * Returns the list of codes of the same kind than this code list element.
+     * Returns the list of codes of the same kind as this code list element.
      * Invoking this method is equivalent to invoking {@link #values()}, except that
      * this method can be invoked on an instance of the parent {@code CodeList} class.
      *
@@ -102,7 +102,7 @@ public final class EvaluationMethodType extends CodeList<EvaluationMethodType> {
 
     /**
      * Returns the evaluation method type that matches the given string, or returns a
-     * new one if none match it. More specifically, this methods returns the first instance for
+     * new one if none match it. More specifically, this method returns the first instance for
      * which <code>{@linkplain #name() name()}.{@linkplain String#equals equals}(code)</code>
      * returns {@code true}. If no existing instance is found, then a new one is created for
      * the given name.

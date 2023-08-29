@@ -44,7 +44,7 @@ import org.opengis.referencing.crs.CRSAuthorityFactory;
  *   <caption>Report properties</caption>
  *   <tr><th>Key</th>                            <th>Remarks</th>   <th>Meaning</th></tr>
  *   <tr><td>{@code TITLE}</td>                  <td></td>          <td>Title of the web page to produce.</td></tr>
- *   <tr><td>{@code DESCRIPTION}</td>            <td>optional</td>  <td>Description to write after the introductory paragraph.</td></tr>
+ *   <tr><td>{@code DESCRIPTION}</td>            <td>optional</td>  <td>MeasureDescription to write after the introductory paragraph.</td></tr>
  *   <tr><td>{@code OBJECTS.KIND}</td>           <td></td>          <td>Kind of objects listed in the page (e.g. <cite>"Coordinate Reference Systems"</cite>).</td></tr>
  *   <tr><td>{@code FACTORY.NAME}</td>           <td></td>          <td>The name of the authority factory.</td></tr>
  *   <tr><td>{@code FACTORY.VERSION}</td>        <td></td>          <td>The version of the authority factory.</td></tr>

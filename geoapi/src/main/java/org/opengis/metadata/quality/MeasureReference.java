@@ -41,25 +41,25 @@ import static org.opengis.annotation.Specification.*;
  * and store the information in order to be able to refer to it each time needed,
  * instead of re-describing the measure within a data quality report.
  * This {@code MeasureReference} represents a reference to a measure in a catalogue.
- * The full measure description is given by {@link Measure}.
+ * The full measure description is given by {@link QualityMeasure}.
  *
  * @author  Alexis Gaillard (Geomatys)
  * @author  Martin Desruisseaux (Geomatys)
  * @version 3.1
  *
- * @see Element#getMeasureReference()
- * @see Measure
+ * @see QualityElement#getMeasureReference()
+ * @see QualityMeasure
  *
  * @since 3.1
  */
-@UML(identifier="DQ_MeasureReference", specification=ISO_19157)
+@UML(identifier="MeasureReference", specification=ISO_19157)
 public interface MeasureReference {
     /**
      * Identifier of the measure, value uniquely identifying the measure within a namespace.
      *
      * @return code identifying a registered measure, or {@code null} if none.
      *
-     * @see Measure#getMeasureIdentifier()
+     * @see QualityMeasure#getMeasureIdentifier()
      */
     @UML(identifier="measureIdentification", obligation=OPTIONAL, specification=ISO_19157)
     default Identifier getMeasureIdentification() {
@@ -68,11 +68,12 @@ public interface MeasureReference {
 
     /**
      * Name(s) of the test applied to the data.
-     * Mandatory if {@linkplain #getMeasureIdentification() measure identification} is not provided.
+     *
+     * @Condition Mandatory if {@linkplain #getMeasureIdentification() measure identification} is not provided.
      *
      * @return name of the test applied to the data.
      *
-     * @see Measure#getName()
+     * @see QualityMeasure#getName()
      */
     @UML(identifier="nameOfMeasure", obligation=CONDITIONAL, specification=ISO_19157)
     default Collection<? extends InternationalString> getNamesOfMeasure() {
@@ -82,11 +83,13 @@ public interface MeasureReference {
     /**
      * Description of the measure.
      *
+     * @Condition Mandatory if {@linkplain #getMeasureIdentification() measure identification} is not provided.
+     *
      * @return description of the measure being determined, or {@code null} if none.
      *
-     * @see Measure#getDefinition()
+     * @see QualityMeasure#getDefinition()
      */
-    @UML(identifier="measureDescription", obligation=OPTIONAL, specification=ISO_19157)
+    @UML(identifier="measureDescription", obligation=CONDITIONAL, specification=ISO_19157)
     default InternationalString getMeasureDescription() {
         return null;
     }
