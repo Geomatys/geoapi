@@ -35,10 +35,10 @@ import static org.opengis.annotation.Specification.*;
  * either as a citation or as an online resource.
  * Its structure is free. However, the quality evaluation report shall not replace the metadata.
  *
- * @author  Alexis Gaillard (IRD)
+ * @author  Erwan Roussel (Geomatys)
  * @author  Martin Desruisseaux (Geomatys)
- * @version 3.1
- * @since   3.1
+ * @version 4.0
+ * @since   4.0
  *
  */
 @UML(identifier="QualityEvaluationReportInformation", specification=ISO_19157)
@@ -48,6 +48,7 @@ public interface QualityEvaluationReportInformation {
      *
      * @return reference of the quality evaluation report.
      */
+    // todo: see note about this field and the onlineResource phantom field in the specific file
     @UML(identifier="reportReference", obligation=MANDATORY, specification=ISO_19157)
     Citation getReportReference();
 
@@ -66,6 +67,8 @@ public interface QualityEvaluationReportInformation {
      *
      * @return details of the quality evaluation report.
      */
+     // todo: there is a discrepancy in the spec between UML and Annex table. This field is tagged as a single value in
+    //  todo: the UML and as a collection in the table. Here we follow the API, Annex examples (section D.3.5) are not really clear.
     @UML(identifier="qualityEvaluationReportDetails", obligation=OPTIONAL, specification=ISO_19157)
     default Collection<? extends InternationalString> getQualityEvaluationReportDetails() {
         return null;

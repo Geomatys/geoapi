@@ -17,20 +17,18 @@
  */
 package org.opengis.metadata.quality;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 
 /**
- * A simple implementation of {@link QualityElement} for testing purposes.
+ * A simple implementation of {@link Element} for testing purposes.
  *
  * @author  Martin Desruisseaux (Geomatys)
  * @version 3.1
  * @since   3.1
  */
-final class QualityElementImpl implements QualityElement {
+final class ElementImpl implements Element {
     /**
      * Information about the evaluation method, or {@code null} if none.
      */
@@ -41,37 +39,38 @@ final class QualityElementImpl implements QualityElement {
      *
      * @param  method  information about the evaluation method, or {@code null} if none.
      */
-    QualityElementImpl(final EvaluationMethod method) {
+    ElementImpl(final EvaluationMethod method) {
         this.method = method;
+    }
+
+    @Override
+    public MeasureReference getMeasureReference() {
+        return null;
+    }
+
+    @Override
+    public Collection<? extends EvaluationMethod> getEvaluationMethods() {
+        return null;
     }
 
     /**
      * Returns the evaluation information.
      */
     @Override
-    public List<EvaluationMethod> getEvaluationMethods() {
-        List<EvaluationMethod> methods = new ArrayList<>();
-        methods.add(method);
-        return methods;
-    }
-
-    @Override
     public EvaluationMethod getEvaluationMethod() {
         return method;
     }
 
-    /**
-     * No yet implemented.
-     */
-    @Override
-    public MeasureReference getMeasureReference() { return null; }
-
-
-    /**
-     * No yet implemented.
-     */
     @Override
     public Collection<? extends QualityResult> getQualityResults() {
+        return null;
+    }
+
+    /**
+     * No yet implemented.
+     */
+    @Override
+    public Collection<? extends Result> getResults() {
         return Collections.emptyList();
     }
 }

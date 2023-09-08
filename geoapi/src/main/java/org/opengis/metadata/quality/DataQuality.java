@@ -88,6 +88,22 @@ public interface DataQuality {
     }
 
     /**
+     * Reference to an external standalone quality report.
+     * Can be used for providing more details than reported as standard metadata.
+     *
+     * @return reference to an external standalone quality report, or {@code null} if none.
+     *
+     * @since 3.1
+     *
+     * @deprecated Removed from ISO 19157:2023.
+     */
+    @Deprecated
+    @UML(identifier="standaloneQualityReport", obligation=OPTIONAL, specification=ISO_19157, version = 2013)
+    default StandaloneQualityReportInformation getStandaloneQualityReport() {
+        return null;
+    }
+
+    /**
      * References the report(s) associated to quality element(s).
      * new text suggestion : References the report(s) ({@link Metaquality} or {@link QualityEvaluationReportInformation}) associated to quality element(s).
      * Can be used for providing more details than reported as standard metadata.

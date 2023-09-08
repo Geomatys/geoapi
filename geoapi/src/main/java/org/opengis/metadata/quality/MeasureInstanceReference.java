@@ -90,7 +90,7 @@ final class MeasureInstanceReference implements MeasureReference {
     public InternationalString getMeasureDescription() {
         InternationalString def = measure.getDefinition();
         if (def == null) {
-            final MeasureDescription description = measure.getDescription();
+            final MeasureDescription description = ((Measure) measure).getDescription();
             if (description != null) {
                 def = description.getTextDescription();
             }

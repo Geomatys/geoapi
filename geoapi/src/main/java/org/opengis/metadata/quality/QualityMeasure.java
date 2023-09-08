@@ -147,24 +147,6 @@ public interface QualityMeasure {
      */
     @UML(identifier="description", obligation=MANDATORY, specification=ISO_19157)
     Collection<? extends MeasureDescription> getDescriptions();
-    
-    /**
-     * Description of the data quality measure.
-     * Includes methods of calculation, with all formulae and/or illustrations
-     * needed to establish the result of applying the measure.
-     *
-     * <p>If the measure uses the concept of errors, it should be stated how an item is classified as incorrect.
-     * This is the case when the quality only can be reported as correct or incorrect.</p>
-     *
-     * @return description of data quality measure.
-     *
-     * @see MeasureReference#getMeasureDescription()
-     *
-     * @deprecated Replaced by {@link #getDescriptions()} as of ISO 19157:2023.
-     */
-    @Deprecated
-    @UML(identifier="description", obligation=OPTIONAL, specification=ISO_19157, version = 2013)
-    default MeasureDescription getDescription() { return null; }
 
     /**
      * References to the source of an item that has been adopted from an external source.
