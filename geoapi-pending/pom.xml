@@ -4,11 +4,10 @@
          http://maven.apache.org/maven2/
      ==================================================== -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.1.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.1.0 http://maven.apache.org/xsd/maven-4.1.0.xsd">
+  <modelVersion>4.1.0</modelVersion>
   <parent>
     <groupId>org.opengis</groupId>
     <artifactId>geoapi-parent</artifactId>
@@ -228,38 +227,22 @@
            Compilation
        ==================================================== -->
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sources</id>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>../geoapi/src/main/java</source>
-              </sources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>resources</id>
-            <goals>
-              <goal>add-resource</goal>
-            </goals>
-            <configuration>
-              <resources>
-                <resource>
-                  <directory>../geoapi/src/main/resources</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+    <sources>
+      <source>
+        <directory>src/main/java</directory>
+      </source>
+      <source>
+        <directory>../geoapi/src/main/java</directory>
+      </source>
+      <source>
+        <directory>src/main/resources</directory>
+        <lang>resources</lang>
+      </source>
+      <source>
+        <directory>../geoapi/src/main/resources</directory>
+        <lang>resources</lang>
+      </source>
+    </sources>
   </build>
 
 </project>
