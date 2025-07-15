@@ -17,6 +17,8 @@
  */
 package org.opengis.feature;
 
+import java.util.Optional;
+
 
 /**
  * An instance of a {@link FeatureType} containing values for a real-world phenomena.
@@ -158,4 +160,48 @@ public interface Feature {
      * @see FeatureAssociation#setValue(Feature)
      */
     void setPropertyValue(final String name, final Object value) throws IllegalArgumentException;
+
+    /**
+     * Returns the explicit or default value of a characteristic of a property.
+     * This is a shortcut for the following chain of method invocations
+     * (cast and null checks omitted for brevity):
+     *
+     * {@snippet lang="java" :
+     * return Optional.ofNullable(
+     *         ((Attribute<?>) getProperty(property))
+     *         .characteristics()
+     *         .get(characteristic)
+     *         .getValue());
+     * }
+     *
+     * If the attribute has no {@linkplain Attribute#characteristics() characteristic} of the given name,
+     * then this method fallbacks on the default value of the {@linkplain AttributeType#characteristics()
+     * characteristics of the attribute type}.
+     *
+     * @param  property        name of the property for which to get a characteristic.
+     * @param  characteristic  name of the characteristic of the property of the given name.
+     * @return value of the specified characteristic on the specified property, or an empty value
+     *         if the property is not an attribute or the attribute has no such characteristic.
+     * @throws PropertyNotFoundException if the {@code property} argument is not the name of a property of this feature.
+     *
+     * @see Attribute#characteristics()
+     * @see AttributeType#characteristics()
+     */
+    default Optional<?> getCharacteristicValue(final String property, final String characteristic)
+            throws PropertyNotFoundException
+    {
+        Property p = getProperty(property);
+        if (p instanceof Attribute<?>) {
+            var attribute = (Attribute<?>) p;
+            Attribute<?> ca = attribute.characteristics().get(characteristic);
+            if (ca != null) {
+                // If the characteristic is present, assume that an explicitly null value is intentional.
+                return Optional.ofNullable(ca.getValue());
+            } else {
+                return Optional.ofNullable(attribute.getType().characteristics().get(characteristic))
+                        .map(AttributeType::getDefaultValue);
+            }
+        }
+        return Optional.empty();
+    }
 }
