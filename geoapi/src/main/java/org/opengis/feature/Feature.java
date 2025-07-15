@@ -158,27 +158,4 @@ public interface Feature {
      * @see FeatureAssociation#setValue(Feature)
      */
     void setPropertyValue(final String name, final Object value) throws IllegalArgumentException;
-
-    /**
-     * Returns the value for the property of the given name if that property exists, or a fallback value otherwise.
-     * This method is equivalent to the following code, but potentially more efficient when the property does not exist:
-     *
-     * {@snippet lang="java" :
-     * try {
-     *     return getPropertyValue(name);
-     * } catch (PropertyNotFoundException ignore) {
-     *     return missingPropertyFallback
-     * }}
-     *
-     * Note that if a property of the given name exists but has no value, then this method returns
-     * the {@linkplain AttributeType#getDefaultValue() default value} (which may be {@code null}).
-     * <i>Property without value</i> is not equivalent to <i>non-existent property</i>.
-     *
-     * @param  name  the property name.
-     * @param  missingPropertyFallback  the (potentially {@code null}) value to return
-     *         if no attribute or association of the given name exists.
-     * @return value or default value of the specified property, or {@code missingPropertyFallback}
-     *         if no attribute or association of that name exists. This value may be {@code null}.
-     */
-    Object getValueOrFallback(String name, Object missingPropertyFallback);
 }

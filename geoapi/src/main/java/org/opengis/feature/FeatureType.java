@@ -108,7 +108,7 @@ public interface FeatureType extends IdentifiedType {
      * @param  name  the name of the property to search.
      * @return whether an attribute, operation or association role exists for the given name.
      */
-//  boolean hasProperty(String name);
+    boolean hasProperty(String name);
 
     /**
      * Returns the attribute, operation or association role for the given name.
