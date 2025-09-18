@@ -19,6 +19,7 @@ package org.opengis.bridge.python;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Properties;
@@ -180,12 +181,8 @@ public abstract class Interfacing extends CodeList<Interfacing> {
      * @throws IllegalArgumentException if there is no code for the given name.
      */
     public static Interfacing valueOf(final String code) {
-        final Interfacing c = valueOf(Interfacing.class, code);
-        if (c != null) {
-            return c;
-        } else {
-            throw new IllegalArgumentException("No interfacing named " + code);
-        }
+        final Optional<Interfacing> c = valueOf(Interfacing.class, code, null);
+        return c.orElseThrow(() -> new IllegalArgumentException("No interfacing named " + code));
     }
 
     /**

@@ -139,14 +139,7 @@ class Converter<T> implements Function<PyObject,T> {
         @Override public T apply(final PyObject value) {
             final String name = name(value);
             if (name == null) return null;
-            return CodeList.valueOf(type, (c) -> {
-                for (final String n : c.names()) {
-                    if (name.equalsIgnoreCase(n)) {
-                        return true;
-                    }
-                }
-                return false;
-            }, name);
+            return CodeList.valueOf(type, name, null).orElse(null);
         }
     }
 
