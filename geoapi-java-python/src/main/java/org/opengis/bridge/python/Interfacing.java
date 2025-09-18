@@ -180,12 +180,8 @@ public abstract class Interfacing extends CodeList<Interfacing> {
      * @throws IllegalArgumentException if there is no code for the given name.
      */
     public static Interfacing valueOf(final String code) {
-        final Interfacing c = valueOf(Interfacing.class, code);
-        if (c != null) {
-            return c;
-        } else {
-            throw new IllegalArgumentException("No interfacing named " + code);
-        }
+        return valueOf(Interfacing.class, code, null)
+                .orElseThrow(() -> new IllegalArgumentException("No interfacing named " + code));
     }
 
     /**
