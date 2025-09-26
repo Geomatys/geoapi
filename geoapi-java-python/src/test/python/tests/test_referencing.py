@@ -33,9 +33,6 @@
 #     python -m unittest discover
 #
 
-import jpyutil
-jpyutil.init_jvm()
-
 import jpy
 import opengis.bridge.java.referencing
 import unittest

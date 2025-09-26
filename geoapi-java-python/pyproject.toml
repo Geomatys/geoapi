@@ -1,0 +1,72 @@
+[build-system]
+requires = [
+    "setuptools >= 74.1",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geoapi-python"
+dynamic = ["version"]
+dependencies = [
+    "jpy >= 1.1.0"
+]
+requires-python = ">=3.10"
+authors = [
+    {name = "Matthieu Bastianelli", email = "matthieu.bastianelli@geomatys.com"},
+    {name = "David Meaux", email = "david.meaux@geomatys.com"},
+    {name = "Martin Desruisseaux", email = "martin.desruisseaux@geomatys.com"},
+]
+maintainers = [
+    {name = "Matthieu Bastianelli", email = "matthieu.bastianelli@geomatys.com"},
+    {name = "David Meaux", email = "david.meaux@geomatys.com"},
+    {name = "Martin Desruisseaux", email = "martin.desruisseaux@geomatys.com"},
+]
+description = "Java - Python binding of GeoAPI - abstractions for OGC/ISO standards"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {text = "Apache 2.0 License"}
+keywords = ["geospatial", "metadata", "referencing"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Software Development :: Libraries"
+]
+
+
+[project.optional-dependencies]
+build = [
+    "build"
+]
+dev = [
+]
+doc = [
+]
+test = [
+    "pytest >= 7.4"
+]
+
+
+[project.urls]
+Homepage      = "https://www.geoapi.org/java-python/"
+Documentation = "https://www.geoapi.org/java-python/index.html"
+#API          = "https://www.geoapi.org/snapshot/python/index.html"
+Repository    = "https://github.com/opengeospatial/geoapi/"
+
+
+# Set max line length to the PEP 8 standard recommandation.
+line-length = "79"
+
+exclude = [
+    "*.pyi"
+]
+# pytest
+# ----------------------------------------
+[tool.pytest.ini_options]
+log_cli = "True"
+log_level = "INFO"
+# ----------------------------------------
