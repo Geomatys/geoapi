@@ -471,9 +471,8 @@ public interface ParameterValue<T> extends GeneralParameterValue {
      * because some implementations may choose to convert a wider range of types.</p>
      *
      * @param  value  the parameter value.
-     * @throws InvalidParameterValueException if the type of {@code value} is inappropriate
-     *         for this parameter, or if the value is illegal for some other reason (for example
-     *         the value is numeric and out of range).
+     * @throws InvalidParameterValueException if the type of {@code value} is incorrect for this parameter,
+     *         or if the value is illegal for some other reason (for example, a number out of valid range).
      *
      * @see #getValue()
      */

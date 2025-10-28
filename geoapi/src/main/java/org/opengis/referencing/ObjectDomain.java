@@ -26,7 +26,7 @@ import static org.opengis.annotation.Specification.*;
 
 
 /**
- * Scope and domain of validity of a CRS-related object.
+ * Scope and domain of validity of a <abbr>CRS</abbr>-related object.
  * The scope is a description of the primary purpose to which a coordinate reference system,
  * datum or coordinate system is applied. The domain of validity describes the spatial and
  * temporal extent in which the object can be used.
