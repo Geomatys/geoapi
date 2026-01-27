@@ -78,7 +78,7 @@ public class CompatibilityVerifier implements Closeable {
      */
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public static void listChanges() throws IOException, ClassNotFoundException, NoSuchMethodException {
-        try (final CompatibilityVerifier c = new CompatibilityVerifier("3.1-SNAPSHOT", "4.0-SNAPSHOT")) {
+        try (final CompatibilityVerifier c = new CompatibilityVerifier("3.1-SNAPSHOT", "4.0-M28")) {
             for (final IncompatibleChange change : c.acceptedIncompatibleChanges) {
                 System.out.println(change.method + "=I");
             }
