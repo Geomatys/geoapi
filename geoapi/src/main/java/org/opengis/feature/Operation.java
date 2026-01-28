@@ -59,9 +59,9 @@ public interface Operation extends PropertyType {
     ParameterDescriptorGroup getParameters();
 
     /**
-     * Returns the expected result type, or {@code null} if none.
+     * Returns the expected result type.
      *
-     * @return the type of the result, or {@code null} if none.
+     * @return the type of the result.
      */
     @UML(identifier="signature", obligation=MANDATORY, specification=ISO_19109)
     IdentifiedType getResult();

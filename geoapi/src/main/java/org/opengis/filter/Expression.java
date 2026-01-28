@@ -135,9 +135,9 @@ public interface Expression<R,V> extends Function<R,V> {
      * is not suitable to spatial operations.
      *
      * <h4>Exceptions</h4>
-     * An {@link ClassCastException} should be thrown at this method invocation time if values are known to be
+     * A {@link ClassCastException} should be thrown at this method invocation time if values are known to be
      * unconvertible to the specified type. But if convertibility can only be determined at {@link #apply(R)}
-     * invocation time, then a {@link ClassCastException} can be thrown at evaluation time.
+     * invocation time, then {@link ClassCastException} may be deferred to evaluation time.
      * In this paragraph, "convertible" does not necessarily mean that implementations must be able to copy values
      * into objects of specified type. It is okay to apply only {@linkplain Class#cast(Object) standard Java casts}.
      *
