@@ -10,11 +10,16 @@ org.opengis.metadata.extent.TemporalExtent
 org.opengis.metadata.identification.AssociatedResource
 org.opengis.metadata.identification.Identification
 org.opengis.metadata.quality.Completeness
+org.opengis.metadata.quality.DataEvaluation
 org.opengis.metadata.quality.Element
+org.opengis.metadata.quality.EvaluationMethod
 org.opengis.metadata.quality.LogicalConsistency
+org.opengis.metadata.quality.Metaquality
+org.opengis.metadata.quality.NonQuantitativeAttributeCorrectness
 org.opengis.metadata.quality.PositionalAccuracy
 org.opengis.metadata.quality.Result
 org.opengis.metadata.quality.TemporalAccuracy
+org.opengis.metadata.quality.TemporalQuality
 org.opengis.metadata.quality.ThematicAccuracy
 org.opengis.metadata.spatial.GeolocationInformation
 org.opengis.metadata.spatial.GridSpatialRepresentation

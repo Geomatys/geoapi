@@ -47,6 +47,27 @@
     </developer>
   </developers>
 
+  <contributors>
+    <contributor>
+      <name>Laetitia Viau</name>
+      <organization>Geomatys</organization>
+      <organizationUrl>http://www.geomatys.com</organizationUrl>
+      <roles>
+        <role>Java developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </contributor>
+    <contributor>
+      <name>Matthieu Bastianelli</name>
+      <organization>Geomatys</organization>
+      <organizationUrl>http://www.geomatys.com</organizationUrl>
+      <roles>
+        <role>Java developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </contributor>
+  </contributors>
+
 
 
   <!-- ====================================================
@@ -57,11 +78,6 @@
       <groupId>org.opengis</groupId>
       <artifactId>geoapi-pending</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jpyconsortium</groupId>
-      <artifactId>jpy</artifactId>
-      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>tech.uom</groupId>
@@ -84,54 +100,17 @@
 
 
 
-  <!-- ==================================================================
-           Repository from which to download the JPY library.
-       ================================================================== -->
-  <repositories>
-    <repository>
-      <id>senbox</id>
-      <name>Senbox repository</name>
-      <url>http://nexus.senbox.net/nexus/content/repositories/releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+  <properties>
+    <maven.compiler.release>22</maven.compiler.release>
+  </properties>
 
-
-
-  <!-- ====================================================
-           Skip the tests because they require native code
-       ==================================================== -->
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skipTests>${skipNativeLibraryTests}</skipTests>
-        </configuration>
-      </plugin>
-
-      <!-- Anticipation for Java 9. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Automatic-Module-Name>
-                org.opengis.geoapi.python
-              </Automatic-Module-Name>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <release>9</release>
+          <debug>true</debug>
         </configuration>
       </plugin>
     </plugins>

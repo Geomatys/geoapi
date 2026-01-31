@@ -17,21 +17,25 @@
  */
 package org.opengis.bridge.python;
 
-import java.util.List;
 import java.util.Objects;
-import org.jpy.PyModule;
-import org.jpy.PyObject;
+import java.lang.ref.Cleaner;
 
 
 /**
  * Interfaces Java applications with an environment in which a Python interpreter is running.
- * Only one instance of {@code Environment} is needed.
+ * Only one instance of {@code Environment} is needed. This object should be used in a
+ * {@code try} … {@code finally} block for releasing resources when no longer needed.
  *
  * @author  Martin Desruisseaux (Geomatys)
  * @version 4.0
  * @since   4.0
  */
-public class Environment {
+public class Environment implements AutoCloseable {
+    /**
+     * The bindings, or {@code null} if the environment has been {@linkplain #close() closed}.
+     */
+    private CPython bindings;
+
     /**
      * Accessor to Python built-in functions.
      * Used for {@code len(collection)}, {@code iter(collection)}, {@code next(collection)} and {@code str(object)}.
@@ -39,108 +43,78 @@ public class Environment {
     final PyObject builtins;
 
     /**
-     * Creates a new environment with default configuration.
-     * A Python interpreter must be available at the time this constructor is invoked.
+     * Cleaner for releasing Python objects after the Java objects is no longer reachable.
      */
-    public Environment() {
-        builtins = PyModule.getBuiltins();
+    final Cleaner cleaner;
+
+    /**
+     * Creates a new environment. Current implementation accepts only binding to CPython.
+     * But a future version could allow different implementations of Python interpreter.
+     */
+    private Environment(final CPython bindings) {
+        this.bindings = bindings;
+        cleaner = Cleaner.create();
+        builtins = bindings.importModule("builtins");
     }
 
     /**
-     * Represents the given Python object as a Java object of the given type.
-     * The given {@code type} argument can be any of the following:
+     * Creates a new environment using the CPython interpreter.
+     * If a CPython interpreter is already initialized, it will be used.
+     * Otherwise, CPython will be automatically initialized with the given configuration options.
      *
-     * <ul>
-     *   <li>A {@link Double}, {@link Integer} or {@link Boolean}.</li>
-     *   <li>A {@link CharSequence}, {@link String} or {@link InternationalString}.</li>
-     *   <li>An enumeration such as {@link org.opengis.annotation.Obligation}.</li>
-     *   <li>A code list such as {@link org.opengis.metadata.Datatype}.</li>
-     *   <li>A GeoAPI interface (not an implementation class) such as {@link org.opengis.metadata.Metadata}.</li>
-     *   <li>A non-GeoAPI interface such as {@link java.util.function.Supplier}.</li>
-     * </ul>
-     *
-     * GeoAPI and non-GeoAPI interfaces are handled differently; see {@link #getInterfacing(Class)} for details.
+     * @param  config   interpreter configuration.
+     * @return connection to a CPython interpreter.
+     * @throws EnvironmentException if a configuration error prevents the Java-Python bridge to work normally.
+     */
+    public static Environment forCPython(Configuration config) {
+        try {
+            final CPython bindings = new CPython(Objects.requireNonNull(config));
+            try {
+                bindings.configuration();
+                return new Environment(bindings);
+            } catch (Throwable e) {
+                bindings.shutdown();
+                throw e;
+            }
+        } catch (EnvironmentException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new EnvironmentException("Cannot bind to CPython interpreter.", e);
+        }
+    }
+
+    /**
+     * Wraps the given Python object in a Java object of the given type.
+     * The given type should be a GeoAPI interface.
+     * The given {@code PyObject} will be automatically closed
+     * when the returned object is garbage-collected.
      *
      * @param  <T>     compile-time value of the {@code type} argument.
-     * @param  object  the Python object to wrap in a Java object, or {@code null}.
+     * @param  object  the Python object to wrap in a Java object.
      * @param  type    interface to be implemented by the desired Java wrapper.
-     * @return the given Python object as a Java instance of the given type, or {@code null} if the given object was null.
-     * @throws UnconvertibleTypeException if this method does not know how to convert Python objects to the given type.
+     * @return Java object implementing the given interface by delegating the the Python object.
      */
-    public <T> T toJava(final PyObject object, final Class<T> type) throws UnconvertibleTypeException {
-        Objects.requireNonNull(type);
-        if (object == null) {
-            return null;
-        }
-        if (Iterable.class.isAssignableFrom(type)) {
-            throw new UnconvertibleTypeException("Cannot convert to a collection. Use the asList method instead.");
-        } else {
-            return Converter.verifiedInstance(this, type).apply(object);
-        }
+    final <T> T pythonToJava(final PyObject object, final Class<T> type) {
+        final var proxy = new Singleton(this, object);
+        final T result = type.cast(proxy.newProxyInstance(type));
+        object.automaticRelease(cleaner, result);
+        return result;
     }
 
     /**
-     * Represents the given Python sequence as a read-only Java list containing elements of the given type.
-     * The given {@code type} argument can be the same as the ones accepted by {@link #toJava(PyObject, Class)}.
-     *
-     * @param  <E>     compile-time value of the {@code type} argument.
-     * @param  object  the Python sequence to represent as a Java list, or {@code null} for an empty list.
-     * @param  type    interface to be implemented by the Java elements in the list.
-     * @return the given Python sequence as a Java list with elements of the given type.
-     * @throws UnconvertibleTypeException if this method does not know how to convert Python objects to the given type.
+     * Releases the resources used by this environment.
+     * If the environment is already closed, then this method does nothing.
      */
-    public <E> List<E> asList(final PyObject object, final Class<E> type) throws UnconvertibleTypeException {
-        Objects.requireNonNull(type);
-        if (object != null) {
-            return new Sequence<>(this, type, object);
-        } else {
-            return List.of();
+    @Override
+    public void close() {
+        final CPython close;
+        synchronized (this) {
+            close = bindings;
+            bindings = null;
         }
-    }
-
-    /**
-     * Returns the Java type for the given Python object. This method assumes that the Java type for the given
-     * Python object is at least the {@code base} type, but it may also be a subtype of {@code base}.
-     *
-     * @param  <T>       compile-time value of the {@code base} argument.
-     * @param  base      the base type of the desired interface.
-     * @param  object    the Python object for which to get the Java type, or {@code null}.
-     * @return the Python object type as a type assignable to {@code base}. May be {@code base} itself.
-     */
-    public <T> Class<? extends T> getJavaType(final Class<T> base, final PyObject object) {
-        Objects.requireNonNull(base);
-        if (object != null) {
-            final Interfacing inf = getInterfacing(base);
-            if (inf.hasKnownSubtypes(base)) {
-                return inf.getJavaType(base, object, builtins);
-            }
+        if (close != null) {
+            builtins.close();
+            close.shutdown();
         }
-        return base;
-    }
-
-    /**
-     * Specifies how the Java methods in the given interface should be mapped to Python methods or attributes.
-     * There are two main interfacing modes supported by default: if this method returns {@link Interfacing#GEOAPI},
-     * then the mapping between Java and Python uses the following rules:
-     *
-     * <ul>
-     *   <li>For any Java method, the name of the corresponding Python attribute is given
-     *       by the {@link org.opengis.annotation.UML} annotation associated to the method.
-     *       If a method has no such annotation, then its name is used as a fallback.</li>
-     *   <li>GeoAPI-specific property types are supported ({@link org.opengis.util.CodeList}
-     *       and {@link InternationalString}) in addition of some Java standard types like
-     *       {@link Enum} and {@link java.util.Collection}.</li>
-     * </ul>
-     *
-     * If this method returns {@link Interfacing#DEFAULT},
-     * then the Python-Java mapping is delegated to the underlying JPY library.
-     * If this method returns another value, then the behavior is defined by
-     * {@link Interfacing#toJava(PyObject, Class)}.
-     *
-     * @param  type  the Java type for which to determine the interfacing mode.
-     * @return a specification of how to interface Java methods to Python.
-     */
-    protected Interfacing getInterfacing(final Class<?> type) {
-        return type.getPackageName().startsWith(Interfacing.GeoAPI.JAVA_PREFIX) ? Interfacing.GEOAPI : Interfacing.DEFAULT;
     }
 }

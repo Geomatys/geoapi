@@ -24,51 +24,65 @@ import java.lang.reflect.Method;
 import java.lang.reflect.WildcardType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.InvocationHandler;
+import java.lang.foreign.MemorySegment;
 import org.opengis.annotation.UML;
-import org.jpy.PyObject;
 
 
 /**
- * Delegates Java method calls on a single GeoAPI object to the equivalent Python object.
+ * Delegates Java method calls from an instance of a GeoAPI type to the equivalent Python object.
+ * This class is used for singleton. For list backed by a Python sequence, see {@link Sequence}.
  *
  * @author  Martin Desruisseaux (Geomatys)
- * @version 4.0
- * @since   4.0
  */
-final class Singleton implements InvocationHandler {
+final class Singleton implements Wrapper, InvocationHandler {
     /**
      * Information about the Python environment (builtin functions, etc).
+     * The same instance is shared by all {@code Singleton}.
      */
     private final Environment environment;
 
     /**
      * The Python object to wrap in a Java object.
+     * This object shall have no reference to {@code this} in order to allow
+     * the Python object to be released when {@code this} is garbage-collected.
      */
     private final PyObject object;
 
     /**
      * Creates a new handler for the given Python object.
      */
-    private Singleton(final Environment environment, final PyObject object) {
+    Singleton(final Environment environment, final PyObject object) {
         this.environment = environment;
-        this.object      = object;
+        this.object = object;
     }
 
     /**
-     * Wraps the given Python object in a Java object of the given type.
-     * The given type should be a GeoAPI interface.
+     * Creates a new proxy implementing the given interface with this handler.
      *
-     * @param <T>     compile-time value of the {@code type} argument.
-     * @param object  the Python object to wrap in a Java object.
-     * @param type    interface to be implemented by the desired Java wrapper.
+     * @param  type  interface to be implemented by the desired Java wrapper.
+     * @return Java object implementing the given interface by delegating the the Python object.
      */
-    static <T> T create(final Environment environment, final PyObject object, final Class<T> type) {
-        return type.cast(Proxy.newProxyInstance(Singleton.class.getClassLoader(),
-                    new Class<?>[] {type}, new Singleton(environment, object)));
+    final Object newProxyInstance(final Class<?> type) {
+        return Proxy.newProxyInstance(
+                Singleton.class.getClassLoader(),
+                new Class<?>[] {type, Wrapper.class},
+                this);
     }
 
     /**
-     * Returns the {@code identifier()} value of the given annotation or {@code null} if none or empty.
+     * Returns the address of the native object if using the given bindings.
+     *
+     * @param  bindings  the bindings used for accessing native objects.
+     * @return address of the native object.
+     * @throws PythonException if the native object is not managed by the specified bindings.
+     */
+    @Override
+    public MemorySegment address(final CPython bindings) {
+        return object.address(bindings);
+    }
+
+    /**
+     * Returns the {@code identifier()} value of the given annotation, or {@code null} if none or empty.
      */
     private static String identifier(final UML uml) {
         if (uml != null) {
@@ -83,11 +97,11 @@ final class Singleton implements InvocationHandler {
      *
      * @param  proxy   the proxy object on which a method has been invoked.
      * @param  method  the invoked Java method.
-     * @param  args    arguments to transfer to the Python method.
+     * @param  args    arguments to transfer to the Python method, or {@code null} if the method takes no arguments.
      * @return the result of the invocation of the Python method.
      */
     @Override
-    public Object invoke(final Object proxy, final Method method, Object[] args) {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) {
         String name = identifier(method.getAnnotation(UML.class));
         if (name == null) {
             name = method.getName();
@@ -100,75 +114,51 @@ final class Singleton implements InvocationHandler {
             switch (args.length) {
                 case 0: {
                     if (name.equals("toString")) {
-                        return environment.builtins.call("str", object).getStringValue();
+                        try (PyObject str = environment.builtins.call("str", object)) {
+                            return str.getStringValue();
+                        }
                     } else if (name.equals("hashCode")) {
                         return object.hashCode();
                     }
                     break;
                 }
                 case 1: {
-                    if (name.equals("equals")) {
+                    if (name.equals("address")) {
+                        return object.address((CPython) args[0]);
+                    } else if (name.equals("equals")) {
                         final Object arg = args[0];
                         if (arg != null && arg.getClass() == proxy.getClass()) {
                             return object.equals(((Singleton) Proxy.getInvocationHandler(arg)).object);
                         } else {
-                            return false;
+                            return Boolean.FALSE;
                         }
                     }
                     break;
                 }
             }
         }
-        /*
-         * If there is arguments, convert all of them from Java to Python objects. If some argument cannot
-         * be converted, they will be left as-is. They may cause an exception to be thrown at callMethod(…)
-         * execution time, depending on JPY implementation.
-         */
         name = CharSequences.camelCaseToSnake(name);
-        final PyObject result;
-        if (args != null) {
-            for (int i=0; i < args.length; i++) {
-                Object arg = args[i];
-                if (arg != null) {
-                    if (arg instanceof CharSequence) {
-                        arg = arg.toString();
-                    } else if (arg instanceof Number) {
-                        continue;                           // Assuming a wrapper for a primitive type, there is nothing to do.
-                    } else if (Proxy.isProxyClass(arg.getClass())) {
-                        final InvocationHandler h = Proxy.getInvocationHandler(arg);
-                        if (!(h instanceof Singleton)) continue;
-                        arg = ((Singleton) h).object;
-                    } else {
-                        continue;
-                    }
-                    args[i] = arg;
-                }
-            }
-            result = object.callMethod(name, args);
-        } else {
-            result = object.getAttribute(name);
-        }
-        /*
-         * Convert the result of the Python method call to the type expected by the Java method.
-         * This may be a collection, in which case each element will be converted on-the-fly.
-         */
-        Class<?> type = method.getReturnType();
-        if (Iterable.class.isAssignableFrom(type)) {
-            if (result != null) {
-                type = boundOfParameterizedProperty(method.getGenericReturnType());
-                return new Sequence<>(environment, type, result);
-            } else {
-                return List.of();
-            }
-        } else if (object.equals(result)) {
-            // Slight optimization: share the same InvocationHandler if the Python object is the same.
-            if (getClass().equals(proxy.getClass())) {
+        try (final PyObject python = object.convertAndCall(name, args)) {
+            if (object.equals(python) && proxy.getClass() == getClass()) {
                 return this;
-            } else {
-                return Proxy.newProxyInstance(Singleton.class.getClassLoader(), new Class<?>[] {type}, this);
             }
-        } else {
-            return Converter.instance(environment, type).apply(result);
+            /*
+             * Convert the result of the Python method call to the type expected by the Java method.
+             * This may be a collection, in which case each element will be converted on-the-fly.
+             */
+            final Object java;
+            Class<?> type = method.getReturnType();
+            if (Iterable.class.isAssignableFrom(type)) {
+                if (python == null) {
+                    return List.of();
+                }
+                type = boundOfParameterizedProperty(method.getGenericReturnType());
+                java = new Sequence<>(environment, type, python);
+                python.automaticRelease(environment.cleaner, java);
+            } else {
+                java = Converter.fromPythonToJava(environment, type).apply(python);
+            }
+            return java;
         }
     }
 
@@ -190,7 +180,7 @@ final class Singleton implements InvocationHandler {
                     if (type instanceof Class<?>) {
                         return (Class<?>) type;
                     }
-                    break;                              // Unknown type.
+                    break;      // Unknown type.
                 }
             }
         }

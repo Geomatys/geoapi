@@ -19,24 +19,24 @@ package org.opengis.bridge.python;
 
 
 /**
- * Thrown if a configuration error prevents the Java-Python bridge to work normally.
+ * Thrown when the Python interpreter threw an exception.
  *
  * @author  Martin Desruisseaux (Geomatys)
  * @version 4.0
  * @since   4.0
  */
-public class EnvironmentException extends PythonException {
+public class PythonException extends RuntimeException {
     /**
      * For cross-version compatibility.
      */
-    private static final long serialVersionUID = 8844371625357866961L;
+    private static final long serialVersionUID = 584282142207436969L;
 
     /**
      * Creates a new exception with the given message.
      *
      * @param message  a description of the problem.
      */
-    public EnvironmentException(final String message) {
+    public PythonException(final String message) {
         super(message);
     }
 
@@ -46,7 +46,7 @@ public class EnvironmentException extends PythonException {
      * @param message  a description of the problem.
      * @param cause    the cause of this problem.
      */
-    public EnvironmentException(final String message, final Throwable cause) {
+    public PythonException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

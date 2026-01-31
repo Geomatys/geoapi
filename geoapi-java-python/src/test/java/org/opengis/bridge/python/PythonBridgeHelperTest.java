@@ -17,15 +17,14 @@
  */
 package org.opengis.bridge.python;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.opengis.metadata.Metadata;
 import org.opengis.metadata.citation.Responsibility;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.util.FactoryException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -33,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Matthieu Bastianelli (Geomatys)
  */
+@SuppressWarnings("exports")
 public final class PythonBridgeHelperTest {
     /**
      * Creates a new test case.
@@ -66,8 +66,9 @@ public final class PythonBridgeHelperTest {
      * @throws FactoryException if an error occurred while fetching the <abbr>CRS</abbr> definition.
      */
     @Test
+    @Disabled("Pending --add-reads geoapi-example")
     public void testReferencing() throws FactoryException {
         final CoordinateReferenceSystem crs = PythonHelper.findCoordinateReferenceSystem("EPSG:3395");
-        Assertions.assertEquals("WGS 84 / World Mercator", crs.getName().getCode());
+        assertEquals("WGS 84 / World Mercator", crs.getName().getCode());
     }
 }

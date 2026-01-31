@@ -31,8 +31,6 @@ import static java.lang.Character.toChars;
  * (e.g. {@code "CamelCase"}) to another (e.g. {@code "snake_case"}).
  *
  * @author  Martin Desruisseaux (Geomatys)
- * @since   4.0
- * @version 4.0
  */
 final class CharSequences {
     /**
@@ -59,12 +57,12 @@ final class CharSequences {
      *
      * <p>The given string is usually a programmatic identifier like a class name or a method name.</p>
      *
-     * @param  identifier   an identifier with no space, words begin with an upper-case character.
+     * @param  identifier  an identifier with no space, words begin with an upper-case character.
      * @return the identifier with underscores inserted after what looks like words.
      */
     static String camelCaseToSnake(final CharSequence identifier) {
         final int length = identifier.length();
-        final StringBuilder buffer = new StringBuilder(length + 8);
+        final var buffer = new StringBuilder(length + 8);
         final int lastIndex = (length != 0) ? length - charCount(codePointBefore(identifier, length)) : 0;
         int last = 0;
         for (int i=1; i<=length;) {

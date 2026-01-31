@@ -25,8 +25,6 @@ import org.opengis.util.InternationalString;
  * An international string consisting of a single string for all locales.
  *
  * @author  Martin Desruisseaux (Geomatys)
- * @version 4.0
- * @since   4.0
  */
 final class Literal implements InternationalString {
     /**

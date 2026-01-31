@@ -18,11 +18,9 @@
 package org.opengis.bridge.python;
 
 import java.util.Locale;
-import java.util.function.Function;
 import org.opengis.util.CodeList;
 import org.opengis.util.ControlledVocabulary;
 import org.opengis.util.InternationalString;
-import org.jpy.PyObject;
 
 
 /**
@@ -30,10 +28,8 @@ import org.jpy.PyObject;
  * A single converter is built once-for-all before to convert an arbitrary number of objects.
  *
  * @author  Martin Desruisseaux (Geomatys)
- * @version 4.0
- * @since   4.0
  */
-class Converter<T> implements Function<PyObject,T> {
+abstract class Converter<T> {
     /**
      * The Java type of converted objects.
      */
@@ -48,13 +44,21 @@ class Converter<T> implements Function<PyObject,T> {
 
     /**
      * Converts the given Python object to a Java object of the converter {@link #type}.
-     * The default implementation wraps the Python object in a proxy forwarding method calls
-     * to the equivalent Python property. Subclasses need to override for primitive types.
+     * If the implementation needs to keep a reference to the given Python object, then
+     * it shall invoke {@link PyObject#automaticRelease(Cleaner, Object)}.
+     * This method is intended to be invoked in the following pattern:
+     *
+     * {@snippet lang="java" :
+     *     Object java;
+     *     try (PyObject python = ...) {
+     *         java = converter.apply(python);
+     *     }
+     *     }
+     *
+     * @param  value  the Python object.
+     * @return the Java object.
      */
-    @Override
-    public T apply(final PyObject value) {
-        return (value != null) ? value.createProxy(type) : null;
-    }
+    public abstract T apply(final PyObject value);
 
     /** Shared converter from Python objects to {@code int} primitive. */
     private static final Converter<Boolean> PRIMITIVE_BOOLEAN = new Converter<Boolean>(Boolean.class) {
@@ -113,7 +117,7 @@ class Converter<T> implements Function<PyObject,T> {
     };
 
     /**
-     * Converter for code list values. The conversion is based only on the enum name, case-insensitive.
+     * Converter for code list values. The conversion is based only on the enumumerated names, case-insensitive.
      */
     private static final class ForCodeList<T extends CodeList<T>> extends Converter<T> {
         /** Creates a new converter for the given code list class. */
@@ -122,11 +126,10 @@ class Converter<T> implements Function<PyObject,T> {
         }
 
         /** Returns the name of the given enumeration or code list value. */
-        static String name(PyObject value) {
+        static String name(final PyObject value) {
             if (value != null) {
-                value = value.getAttribute("value");
-                if (value != null) {
-                    String name = value.getStringValue();
+                try (PyObject code = value.getAttribute("value")) {
+                    String name = code.getStringValue();
                     if (name != null && !(name = name.trim()).isEmpty()) {
                         return name;
                     }
@@ -178,17 +181,17 @@ class Converter<T> implements Function<PyObject,T> {
      */
     private static class GeoAPI<T> extends Converter<T> {
         /** Information about the Python environment (builtin functions, etc). */
-        final Environment environment;
+        protected final Environment environment;
 
         /** Creates a new converter for the given Java type. */
-        GeoAPI(final Environment environment, final Class<T> type) {
+        protected GeoAPI(final Environment environment, final Class<T> type) {
             super(type);
             this.environment = environment;
         }
 
         /** Converts the given Python object to a Java object of the converter {@link #type}. */
         @Override public T apply(final PyObject value) {
-            return (value != null) ? Singleton.create(environment, value, type) : null;
+            return (value != null) ? environment.pythonToJava(value, type) : null;
         }
     }
 
@@ -204,39 +207,35 @@ class Converter<T> implements Function<PyObject,T> {
 
         /** Converts the given Python object to a Java object of the converter {@link #type}. */
         @Override public T apply(final PyObject value) {
-            return (value == null) ? null : Singleton.create(environment, value,
-                    Interfacing.GEOAPI.getJavaType(type, value, environment.builtins));
-        }
-    }
-
-    /**
-     * Converter from Python objects to Java objects using a user-provided function.
-     * This is used only if the user provided a custom {@link Interfacing} instance.
-     */
-    private static final class UserDefined<T> extends Converter<T> {
-        /** User-defined function for interfacing Java to Python. */
-        private final Interfacing provided;
-
-        /** Creates a new converter for the given Java type. */
-        UserDefined(final Interfacing provided, final Class<T> type) {
-            super(type);
-            this.provided = provided;
-        }
-
-        /** Converts the given Python object to a Java object of the converter {@link #type}. */
-        @Override public T apply(final PyObject value) {
-            return (value != null) ? provided.toJava(value, type) : null;
+            if (value == null) {
+                return null;
+            }
+            Class<? extends T> subtype = Interfacing.INSTANCE.getJavaType(type, value, environment.builtins);
+            return environment.pythonToJava(value, subtype);
         }
     }
 
     /**
      * Returns a converter from Python objects to the given Java type.
-     * The converter is not guaranteed to be suitable for the given type;
-     * caller should verify (or delegate to a method that will verify).
+     * The given {@code type} argument can be any of the following:
+     *
+     * <ul>
+     *   <li>A {@link Double}, {@link Integer} or {@link Boolean}.</li>
+     *   <li>A {@link CharSequence}, {@link String} or {@link InternationalString}.</li>
+     *   <li>An enumeration such as {@link org.opengis.annotation.Obligation}.</li>
+     *   <li>A code list such as {@link org.opengis.metadata.Datatype}.</li>
+     *   <li>A GeoAPI interface (not an implementation class) such as {@link org.opengis.metadata.Metadata}.</li>
+     *   <li>A non-GeoAPI interface such as {@link java.util.function.Supplier}.</li>
+     * </ul>
+     *
+     * @param  <T>     compile-time value of the {@code type} argument.
+     * @param  type    interface to be implemented by the desired Java wrappers.
+     * @return converter from Python objects to Java instances of the given type.
+     * @throws UnconvertibleTypeException if this method does not know how to convert Python objects to the given type.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    static Converter<?> instance(final Environment environment, final Class<?> type) {
-        // 'if' statements should be ordered from most frequently-used to less frequently-used.
+    static <T> Converter<? extends T> fromPythonToJava(final Environment environment, final Class<T> type) {
+        // `if` statements should be ordered from most frequently-used to less frequently-used.
         final Converter<?> c;
         if (CharSequence.class.isAssignableFrom(type)) {
             if (InternationalString.class.isAssignableFrom(type)) {
@@ -245,17 +244,10 @@ class Converter<T> implements Function<PyObject,T> {
                 c = STRING;
             }
         } else if (type.isInterface()) {
-            final Interfacing inf = environment.getInterfacing(type);
-            if (inf == Interfacing.GEOAPI) {
-                if (inf.hasKnownSubtypes(type)) {
-                    c = new Specializable<>(environment, type);
-                } else {
-                    c = new GeoAPI<>(environment, type);
-                }
-            } else if (inf == Interfacing.DEFAULT) {
-                c = new Converter<>(type);
+            if (Interfacing.INSTANCE.hasKnownSubtypes(type)) {
+                c = new Specializable<>(environment, type);
             } else {
-                c = new UserDefined<>(inf, type);
+                c = new GeoAPI<>(environment, type);
             }
         } else if (Number.class.isAssignableFrom(type)) {
             if (Double.class.equals(type) || Float.class.equals(type)) {
@@ -280,16 +272,6 @@ class Converter<T> implements Function<PyObject,T> {
         } else {
             throw new UnconvertibleTypeException(type);
         }
-        return c;
-    }
-
-    /**
-     * Returns a safe converter from Python objects to the given Java type.
-     * This method verifies that the returned converter is okay for the Java type.
-     */
-    @SuppressWarnings("unchecked")
-    static <T> Converter<? extends T> verifiedInstance(final Environment environment, final Class<T> type) {
-        final Converter<?> c = instance(environment, type);
         if (type.isAssignableFrom(c.type)) {
             return (Converter<? extends T>) c;
         } else {

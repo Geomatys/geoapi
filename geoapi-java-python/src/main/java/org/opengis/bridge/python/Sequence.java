@@ -21,46 +21,52 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.AbstractSequentialList;
 import java.util.NoSuchElementException;
+import java.lang.foreign.MemorySegment;
 import java.lang.reflect.Array;
-import org.jpy.PyObject;
 
 
 /**
  * A Python sequence, represented as a read-only Java list. While we are mapping a sequence
- * (the main collection type used in GeoAPI Python interfaces) this implementation accepts
+ * (the main collection type used in GeoAPI Python interfaces), this implementation accepts
  * any container capable to provide an iterator.
  *
  * @author  Martin Desruisseaux (Geomatys)
- * @version 4.0
- * @since   4.0
+ *
+ * @param <E> Type of elements in the sequence.
  */
-final class Sequence<E> extends AbstractSequentialList<E> {
+final class Sequence<E> extends AbstractSequentialList<E> implements Wrapper {
     /**
      * Information about the Python environment (builtin functions, etc).
+     * The same instance is shared by all {@code Sequence}.
      */
     private final Environment environment;
 
     /**
-     * Function to apply on each element in the list for
-     * converting from Python objects to Java objects.
-     */
-    private final Converter<? extends E> converter;
-
-    /**
      * The Python sequence. Can actually be any collection capable to provide an iterator.
+     * This object shall have no reference to {@code this} in order to allow
+     * the Python object to be released when {@code this} is garbage-collected.
      */
     private final PyObject collection;
+
+    /**
+     * Function to apply on each element in the list for
+     * converting from Python objects to Java objects.
+     *
+     * @todo This is not sufficient, unless {@code <E>} is a final class.
+     *       Each element of the list could be a different subtype.
+     */
+    private final Converter<? extends E> converter;
 
     /**
      * Iterator over the elements returned by {@link #get(int)}, cached for performance reasons.
      * This is {@code null} if not yet requested.
      */
-    private transient Iterator<E> iter;
+    private transient Iterator<E> getter;
 
     /**
-     * Index of the next element to be returned by {@link #iter}.
+     * Index of the next element to be returned by {@link #getter}.
      */
-    private transient int nextIndex;
+    private transient int nextGetIndex;
 
     /**
      * Creates a new sequence for the given Python collection.
@@ -71,7 +77,19 @@ final class Sequence<E> extends AbstractSequentialList<E> {
     Sequence(final Environment environment, final Class<E> type, final PyObject collection) {
         this.environment = environment;
         this.collection  = collection;
-        this.converter   = Converter.verifiedInstance(environment, type);
+        this.converter   = Converter.fromPythonToJava(environment, type);
+    }
+
+    /**
+     * Returns the address of the native object if using the given bindings.
+     *
+     * @param  bindings  the bindings used for accessing native objects.
+     * @return address of the native object.
+     * @throws PythonException if the native object is not managed by the specified bindings.
+     */
+    @Override
+    public MemorySegment address(final CPython bindings) {
+        return collection.address(bindings);
     }
 
     /**
@@ -79,7 +97,9 @@ final class Sequence<E> extends AbstractSequentialList<E> {
      */
     @Override
     public int size() {
-        return environment.builtins.call("len", collection).getIntValue();
+        try (PyObject length = environment.builtins.call("len", collection)) {
+            return length.getIntValue();
+        }
     }
 
     /**
@@ -89,19 +109,19 @@ final class Sequence<E> extends AbstractSequentialList<E> {
     @Override
     public E get(final int index) {
         if (index >= 0) {
-            if (iter == null || index < nextIndex) {
-                iter = iterator();
-                nextIndex = 0;
+            if (getter == null || index < nextGetIndex) {
+                getter = iterator();
+                nextGetIndex = 0;
             }
             try {
                 E element;
                 do {
-                    element = iter.next();
-                } while (++nextIndex <= index);
+                    element = getter.next();
+                } while (++nextGetIndex <= index);
                 return element;
             } catch (NoSuchElementException e) {
-                iter = null;
-                // Exception will be thrown below.
+                getter = null;
+                throw (IndexOutOfBoundsException) new IndexOutOfBoundsException(index).initCause(e);
             }
         }
         throw new IndexOutOfBoundsException(index);
@@ -113,7 +133,7 @@ final class Sequence<E> extends AbstractSequentialList<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new Iter();
+        return iterator(false);
     }
 
     /**
@@ -121,7 +141,7 @@ final class Sequence<E> extends AbstractSequentialList<E> {
      */
     @Override
     public ListIterator<E> listIterator() {
-        return new BIter();
+        return (BIter) iterator(true);
     }
 
     /**
@@ -134,23 +154,27 @@ final class Sequence<E> extends AbstractSequentialList<E> {
         if (index < 0) {
             throw new IndexOutOfBoundsException(index);
         }
-        final ListIterator<E> iter = listIterator();
+        final ListIterator<E> iterator = listIterator();
         if (index != 0) try {
-            do iter.next();
+            do iterator.next();
             while (--index != 0);
         } catch (NoSuchElementException e) {
             throw new IndexOutOfBoundsException();
         }
-        return iter;
+        return iterator;
     }
 
     /**
-     * Re-throws the given exception if it is not a Python "StopIteration" exception.
+     * Creates a new iterator or list iterator.
+     *
+     * @param  list  whether to create a list iterator instead of an iterator.
+     * @return the iterator.
      */
-    private static void requireStopIteration(final RuntimeException e) {
-        final String msg = e.getMessage();
-        if (msg == null || !msg.contains("StopIteration")) {
-            throw e;
+    private Iter iterator(final boolean list) {
+        try (final PyObject iter = environment.builtins.call("iter", collection)) {
+            final Iter wrapper = list ? new BIter(iter) : new Iter(iter);
+            environment.cleaner.register(wrapper, iter);
+            return wrapper;
         }
     }
 
@@ -165,31 +189,37 @@ final class Sequence<E> extends AbstractSequentialList<E> {
         private final PyObject iter;
 
         /**
-         * The next object to return, or {@link Sequence#DONE} if we reached the iteration end.
+         * The next object to return, or {@code null} if not yet determined.
          * Valid only if {@link #fetched} is {@code true}.
          */
-        private PyObject next;
+        private E next;
 
         /**
          * Whether the next Python element to return has been stored in {@link #next}.
          * We use this flag because {@code null} may be a valid value for {@code next}.
-         * A negative value means that the iteration is finished.
          */
-        private byte fetched;
+        private boolean fetched;
+
+        /**
+         * Whether the iteration is finished.
+         */
+        private boolean finished;
 
         /**
          * Creates a new iterator.
          */
-        Iter() {
-            iter = environment.builtins.call("iter", collection);
+        Iter(final PyObject iter) {
+            this.iter = iter;
         }
 
         /**
          * Get the next element from Python iterator, or throws {@link RuntimeException} if there is no more elements.
          */
         private void fetch() {
-            next = environment.builtins.call("next", iter);
-            fetched = 1;
+            try (PyObject object = environment.builtins.call("next", iter)) {
+                next = converter.apply(object);
+            }
+            fetched = true;
         }
 
         /**
@@ -197,13 +227,13 @@ final class Sequence<E> extends AbstractSequentialList<E> {
          */
         @Override
         public final boolean hasNext() {
-            if (fetched == 0) try {
+            if (!(fetched | finished)) try {
                 fetch();
             } catch (RuntimeException e) {
-                fetched = -1;
+                finished = true;
                 requireStopIteration(e);
             }
-            return fetched >= 0;
+            return fetched;
         }
 
         /**
@@ -211,19 +241,26 @@ final class Sequence<E> extends AbstractSequentialList<E> {
          */
         @Override
         public E next() {
-            if (fetched == 0) try {
+            if (!(fetched | finished)) try {
                 fetch();
             } catch (RuntimeException e) {
-                fetched = -1;
+                finished = true;
                 requireStopIteration(e);
-                throw (NoSuchElementException) new NoSuchElementException().initCause(e);
-            } else if (fetched < 0) {
+                throw new NoSuchElementException(e);
+            } else if (finished) {
                 throw new NoSuchElementException();
             }
-            final E element = converter.apply(next);
-            fetched = 0;
-            next = null;
-            return element;
+            return next;
+        }
+
+        /**
+         * Re-throws the given exception if it is not a Python "StopIteration" exception.
+         */
+        private static void requireStopIteration(final RuntimeException e) {
+            final String message = e.getMessage();
+            if (message == null || !message.contains("StopIteration")) {
+                throw e;
+            }
         }
 
         /**
@@ -262,7 +299,8 @@ final class Sequence<E> extends AbstractSequentialList<E> {
          * Creates a new iterator.
          */
         @SuppressWarnings("unchecked")
-        BIter() {
+        BIter(final PyObject iter) {
+            super(iter);
             elements = (E[]) Array.newInstance(converter.type, size());
         }
 
